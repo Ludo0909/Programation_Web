@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Messagerie</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        
+    </head>
+    <body>
+        <aside class="sidebar-orange">
+            <a href="index.php" class="sidebar-brand">
+                <div class="brand-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="status-indicator"></span>
+                </div>
+            </a>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="home.html" class="nav-item active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="messagerie.html" class="nav-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span class="nav-badge">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="groupes.html" class="nav-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contacts.html" class="nav-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-bottom">
+                <a href="parametre.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </a>
+            </div>
+        </aside>
+        <main class="content">
+            <section class="news-carousel">
+                <h2>À la une</h2>
+                    <div class="carousel-container">
+                        <article class="carousel-item">
+                            <img src="img/article1.jpg" alt="Article 1">
+                            <div class="item-content">
+                                <h3>Premier article</h3>
+                                <p>Résumé première actualité...</p>
+                            </div>
+                        </article>
+                        <article class="carousel-item">
+                            <img src="img/article2.jpg" alt="Article 2">
+                            <div class="item-content">
+                                <h3>Deuxième article</h3>
+                                <p>Résumé rapide de la deuxième actualité...</p>
+                            </div>
+                        </article>
+                        <article class="carousel-item">
+                            <img src="img/article3.jpg" alt="Article 3">
+                            <div class="item-content">
+                                <h3>Troisième article</h3>
+                                <p>Résumé rapide de la troisième actualité...</p>
+                            </div>
+                        </article>
+                    </div>
+            </section>
+            <section class="categories-section">
+                <h2>Catégories</h2>
+                <div class="cards-grid">
+                    <a href="accueil.php" class="card">
+                        <img src="img/home.png" alt="Accueil">
+                        <div class="card-info">
+                            <h3>Accueil</h3>
+                            <p>bla bla</p>
+                        </div>
+                    </a>
+                    <a href="galerie.php" class="card">
+                        <img src="img/images.png" alt="Messagerie">
+                        <div class="card-info">
+                            <h3>Messagerie</h3>
+                            <p>blabla</p>
+                        </div>
+                    </a>
+                    <a href="messages.php" class="card">
+                        <img src="img/home.png" alt="Groupe">
+                        <div class="card-info">
+                            <h3>Groupe</h3>
+                            <p>blabla</p>
+                        </div>
+                    </a>
+                    <a href="contact.php" class="card">
+                        <img src="img/images.png" alt="Contact">
+                        <div class="card-info">
+                            <h3>Contact</h3>
+                            <p>blabla</p>
+                        </div>
+                    </a>
+                    <a href="parametre.html" class="card">
+                        <img src="img/home.png" alt="Paramètres">
+                        <div class="card-info">
+                            <h3>Paramètres</h3>
+                            <p>blabla</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </main>
+        <script src="theme.js" defer></script>
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script>
+            lucide.createIcons();
+        </script>
+        <script src="theme.js" defer></script>
+    </body>
+</html>
