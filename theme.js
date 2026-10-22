@@ -17,6 +17,15 @@ async function chargerDonnees() {
     console.error("Erreur de connexion :", error.message);
   } else {
     console.log("Données reçues :", data);
+
+    const liste = document.getElementById('ma-liste');
+    liste.innerHTML = ''; 
+
+    data.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item.contenu || JSON.stringify(item); 
+      liste.appendChild(li);
+    });
   }
 }
 
