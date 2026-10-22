@@ -1,9 +1,52 @@
 body {
-    margin: 0;
-    font-family: sans-serif;
-    background-color: #f8fafc;
-    padding-left: 88px;
-    font-family: system-ui, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin-left: 88px; 
+}
+
+html.dark-theme body {
+  background-color: #0b0f17; 
+  color: #f8fafc;
+}
+
+/* Titres et textes généraux */
+html.dark-theme .welcome-header h1,
+html.dark-theme .content h2,
+html.dark-theme .card-info h3 {
+  color: #ffffff !important;
+}
+
+html.dark-theme .welcome-header p,
+html.dark-theme .card-info p {
+  color: #94a3b8 !important;
+}
+
+html.dark-theme .categories-section {
+  background-color: #111827;
+  border-color: #ea580c;      
+}
+
+html.dark-theme .card {
+  background-color: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-theme .card:hover {
+  border-color: #ff7a18;
+  transform: translateY(-4px);
+}
+
+.card svg {
+  width: 38px;
+  height: 38px;
+  stroke: #ff7a18; 
+  margin-bottom: 12px;
+  transition: transform 0.2s ease;
+}
+
+html.dark-theme #carouselExampleCaptions {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 .sidebar-orange {
@@ -150,48 +193,37 @@ body {
     align-items: center;
 }
 .content {
-    margin-left: 100px;      
-    padding: 20px;
-}
-
-.carousel-container {
+    padding: 30px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    gap: 20px;
-    overflow-x: auto;              
-    scroll-snap-type: x mandatory; 
-    padding-bottom: 15px;
-    scrollbar-width: thin;       
+    flex-direction: column;
+    gap: 40px;
 }
 
-.carousel-item {
-    flex: 0 0 300px;             
-    scroll-snap-align: start;      
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 15px;
 }
 
-.carousel-item img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
+.welcome-header {
+    margin-bottom: 10px;
 }
 
-.carousel-item .item-content {
-    padding: 15px;
+.welcome-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
 }
 
-.carousel-item h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-}
-
-.carousel-item p {
+.welcome-header p {
+    font-size: 15px;
+    color: #64748b;
     margin: 0;
-    color: #555;
-    font-size: 14px;
+    line-height: 1.5;
 }
 
 .categories-section {
@@ -207,42 +239,57 @@ body {
     margin-top: 0;
     margin-bottom: 25px;
 }
+
+
+
 /* Grille 3x2 */
 .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;                             
+    display: flex;
+    flex-wrap: wrap;         
+    justify-content: center;   
+    gap: 20px;
 }
 
+/* Chaque carte fait environ un tiers de la largeur pour en avoir 3 par ligne */
 .card {
+    flex: 0 0 calc(29% - 14px); 
     background: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 24px 16px;
     text-decoration: none;
-    color: inherit;
-    border: 1px solid #f26726;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
 }
 
-.card img {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
+.card svg {
+    width: 38px;
+    height: 38px;
+    stroke: #ff7a0d;            
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover svg {
+    transform: scale(1.1);     
 }
 
 .card-info h3 {
-    margin: 0 0 6px 0;
-    font-size: 17px;
-    color: #2c3e50;
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
 }
 
 .card-info p {
