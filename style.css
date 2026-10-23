@@ -1,335 +1,312 @@
-/* ===== Style commun : connexion, création de compte, mot de passe oublié ===== */
-
-* {
-    box-sizing: border-box;
-}
-
 body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: system-ui, sans-serif;
-    background: linear-gradient(135deg, #fff7ed 0%, #f8fafc 60%);
-    color: #1e293b;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin-left: 88px; 
+}
+
+html.dark-theme body {
+  background-color: #0b0f17; 
+  color: #f8fafc;
+}
+
+/* Titres et textes généraux */
+html.dark-theme .welcome-header h1,
+html.dark-theme .content h2,
+html.dark-theme .card-info h3 {
+  color: #ffffff !important;
+}
+
+html.dark-theme .welcome-header p,
+html.dark-theme .card-info p {
+  color: #94a3b8 !important;
+}
+
+html.dark-theme .categories-section {
+  background-color: #111827;
+  border-color: #ea580c;      
+}
+
+html.dark-theme .card {
+  background-color: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-theme .card:hover {
+  border-color: #ff7a18;
+  transform: translateY(-4px);
+}
+
+.card svg {
+  width: 38px;
+  height: 38px;
+  stroke: #ff7a18; 
+  margin-bottom: 12px;
+  transition: transform 0.2s ease;
+}
+
+html.dark-theme #carouselExampleCaptions {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.sidebar-orange {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 88px;
+    height: 100vh;
+    background: linear-gradient( #ff7a18, #ea580c);
+    box-shadow: 4px 0 25px rgba(234, 88, 12, 0.25);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 32px 16px;
+    justify-content: space-between;
+    padding: 24px 0;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
-/* Carte principale */
-.auth-card {
-    width: 100%;
-    max-width: 460px;
-    background: #ffffff;
-    border-radius: 20px;
-    border-top: 6px solid #ea580c;
-    box-shadow: 0 12px 40px rgba(234, 88, 12, 0.15);
-    padding: 36px 32px;
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.logo {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 14px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, #ff7a18 0%, #ea580c 100%);
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 16px rgba(234, 88, 12, 0.3);
-}
-
-.logo svg {
-    width: 28px;
-    height: 28px;
-}
-
-.auth-header h1 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    color: #ea580c;
-}
-
-.auth-header p {
-    margin: 0;
-    font-size: 14px;
-    color: #64748b;
-    line-height: 1.5;
-}
-
-/* Champs du formulaire */
-.field {
-    margin-bottom: 16px;
-}
-
-.field label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.field input {
-    width: 100%;
-    padding: 11px 14px;
-    font-size: 15px;
-    font-family: inherit;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    background: #f8fafc;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.field input:focus {
-    outline: none;
-    border-color: #ff7a18;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
-}
-
-.field input.invalid {
-    border-color: #dc2626;
-}
-
-.field input.valid {
-    border-color: #16a34a;
-}
-
-.hint {
-    margin: 6px 0 0;
-    font-size: 12px;
-    color: #64748b;
-    line-height: 1.4;
-}
-
-.error {
-    margin: 6px 0 0;
-    font-size: 12px;
-    color: #dc2626;
-    min-height: 0;
-}
-
-/* Champ mot de passe avec bouton afficher/masquer */
-.password-wrapper {
+.sidebar-brand {
+    text-decoration: none;
     position: relative;
 }
 
-.password-wrapper input {
-    padding-right: 70px;
-}
-
-.toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%);
-    border: none;
-    background: none;
-    color: #ea580c;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 4px 6px;
-}
-
-/* Liste des critères du mot de passe */
-.password-rules {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0 0;
-    font-size: 12px;
-    color: #64748b;
-}
-
-.password-rules li {
-    margin-bottom: 3px;
-}
-
-.password-rules li::before {
-    content: "✗ ";
-    color: #dc2626;
-}
-
-.password-rules li.ok {
-    color: #16a34a;
-}
-
-.password-rules li.ok::before {
-    content: "✓ ";
-    color: #16a34a;
-}
-
-/* Boutons */
-.btn {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: inherit;
+.brand-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #ffffff;
-    background: linear-gradient(180deg, #ff7a18 0%, #ea580c 100%);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(234, 88, 12, 0.3);
+.brand-avatar svg {
+    width: 24px;
+    height: 24px;
 }
 
-.btn-secondary {
+.brand-avatar:hover {
     background: #ffffff;
     color: #ea580c;
-    border: 1.5px solid #ea580c;
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Messages de succès / info */
-.message {
-    display: none;
-    padding: 12px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    margin-bottom: 16px;
-    line-height: 1.4;
+/* Pastille verte de statut en ligne 
+.status-indicator {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 13px;
+    height: 13px;
+    background-color: #22c55e;
+    border: 2px solid #ea580c;
+    border-radius: 50%;
+}*/
+
+.sidebar-nav {
+    width: 100%;
 }
 
-.message.show {
-    display: block;
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
 }
 
-.message.success {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.message.info {
-    background: #fff7ed;
-    color: #9a3412;
-    border: 1px solid #fed7aa;
-}
-
-.message.fail {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* Étapes du mot de passe oublié */
-.step {
-    display: none;
-}
-
-.step.active {
-    display: block;
-}
-
-.steps-indicator {
+.sidebar-nav li {
+    width: 100%;
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
 }
 
-.steps-indicator span {
-    width: 32px;
-    height: 6px;
-    border-radius: 3px;
-    background: #e2e8f0;
+/* Boutons de menu */
+.nav-item {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.steps-indicator span.done {
-    background: #ea580c;
+.nav-item svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.25s ease;
 }
 
-/* Liens en bas de la carte */
-.auth-footer {
-    margin-top: 22px;
+.nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+}
+
+.nav-item:hover svg {
+    transform: scale(1.1);
+}
+
+.nav-item.active {
+    color: #ea580c;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.nav-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #1e293b;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid #ea580c;
+}
+
+.nav-item.active .nav-badge {
+    border-color: #ffffff;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.content {
+    padding: 30px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.welcome-header {
+    margin-bottom: 10px;
+}
+
+.welcome-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.welcome-header p {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.categories-section {
+    margin-top: 40px;
+    border:  2px solid orange ;
+    background-color: white;
+    padding: 30px;             
+    border-radius: 16px;       
+}
+
+.categories-section h2 {
+    color: #ff7a0d;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+
+
+/* Grille 3x2 */
+.cards-grid {
+    display: flex;
+    flex-wrap: wrap;         
+    justify-content: center;   
+    gap: 20px;
+}
+
+/* Chaque carte fait environ un tiers de la largeur pour en avoir 3 par ligne */
+.card {
+    flex: 0 0 calc(29% - 14px); 
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 24px 16px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+}
+
+.card svg {
+    width: 38px;
+    height: 38px;
+    stroke: #ff7a0d;            
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover svg {
+    transform: scale(1.1);     
+}
+
+.card-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.card-info p {
+    margin: 0;
+    font-size: 13px;
     color: #64748b;
 }
 
-.auth-footer a,
-.link-btn {
-    color: #ea580c;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.auth-footer a:hover,
-.link-btn:hover {
-    text-decoration: underline;
-}
-
-.link-btn {
-    background: none;
-    border: none;
-    font-size: 14px;
-    font-family: inherit;
-    cursor: pointer;
-    padding: 0;
-}
-
-/* Ligne « Se souvenir de moi » / « Mot de passe oublié » */
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-    font-size: 14px;
-}
-
-.form-options a {
-    color: #ea580c;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.form-options a:hover {
-    text-decoration: underline;
-}
-
-.remember {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #475569;
-    cursor: pointer;
-}
-
-.remember input {
-    accent-color: #ea580c;
-    width: 16px;
-    height: 16px;
-}
-
-/* Deux champs côte à côte (nom / nom d'utilisateur) */
-.row {
-    display: flex;
-    gap: 12px;
-}
-
-.row .field {
-    flex: 1;
-}
-
-@media (max-width: 480px) {
-    .auth-card {
-        padding: 28px 20px;
+/* Responsive */
+@media (max-width: 900px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    .row {
-        flex-direction: column;
-        gap: 0;
+@media (max-width: 600px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
     }
 }

@@ -4,7 +4,9 @@
         <title>Messagerie</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="style.css">
-        
+        <script src="theme.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
         <aside class="sidebar-orange">
@@ -67,65 +69,102 @@
             </div>
         </aside>
         <main class="content">
-            <section class="news-carousel">
-                <h2>À la une</h2>
-                    <div class="carousel-container">
-                        <article class="carousel-item">
-                            <img src="img/article1.jpg" alt="Article 1">
-                            <div class="item-content">
-                                <h3>Premier article</h3>
-                                <p>Résumé première actualité...</p>
-                            </div>
-                        </article>
-                        <article class="carousel-item">
-                            <img src="img/article2.jpg" alt="Article 2">
-                            <div class="item-content">
-                                <h3>Deuxième article</h3>
-                                <p>Résumé rapide de la deuxième actualité...</p>
-                            </div>
-                        </article>
-                        <article class="carousel-item">
-                            <img src="img/article3.jpg" alt="Article 3">
-                            <div class="item-content">
-                                <h3>Troisième article</h3>
-                                <p>Résumé rapide de la troisième actualité...</p>
-                            </div>
-                        </article>
-                    </div>
-            </section>
+            <header class="welcome-header">
+    <h1>Bienvenue sur votre espace</h1>
+    <p>Retrouvez vos conversations récentes, vos groupes et les dernières actualités de la plateforme.</p>
+</header>
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Mise à jour">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Nouvelle mise à jour disponible !</h5>
+        <p>Interface repensée, envoi rapide et performances améliorées pour vos conversations.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Espaces de groupe">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Espaces de groupe simplifiés</h5>
+        <p>Discutez facilement à plusieurs, partagez vos projets et restez synchronisés avec votre équipe.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Sécurité renforcée">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Sécurité et confidentialité renforcées</h5>
+        <p>Vos messages et données personnelles restent protégés en continu.</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Précédent</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Suivant</span>
+  </button>
+</div>
+<ul id="ma-liste"></ul>
             <section class="categories-section">
                 <h2>Catégories</h2>
                 <div class="cards-grid">
                     <a href="accueil.php" class="card">
-                        <img src="img/home.png" alt="Accueil">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
                         <div class="card-info">
                             <h3>Accueil</h3>
                             <p>bla bla</p>
                         </div>
                     </a>
                     <a href="galerie.php" class="card">
-                        <img src="img/images.png" alt="Messagerie">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
                         <div class="card-info">
                             <h3>Messagerie</h3>
                             <p>blabla</p>
                         </div>
                     </a>
                     <a href="messages.php" class="card">
-                        <img src="img/home.png" alt="Groupe">
+                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
                         <div class="card-info">
                             <h3>Groupe</h3>
                             <p>blabla</p>
                         </div>
                     </a>
                     <a href="contact.php" class="card">
-                        <img src="img/images.png" alt="Contact">
+                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
                         <div class="card-info">
                             <h3>Contact</h3>
                             <p>blabla</p>
                         </div>
                     </a>
                     <a href="parametre.html" class="card">
-                        <img src="img/home.png" alt="Paramètres">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
                         <div class="card-info">
                             <h3>Paramètres</h3>
                             <p>blabla</p>
@@ -134,11 +173,10 @@
                 </div>
             </section>
         </main>
-        <script src="theme.js" defer></script>
         <script src="https://unpkg.com/lucide@latest"></script>
         <script>
             lucide.createIcons();
         </script>
-        <script src="theme.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

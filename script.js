@@ -129,7 +129,7 @@ if (loginForm) {
 
         showMessage(message, "Bienvenue " + account.fullname + " ! Connexion en cours...", "success");
         setTimeout(() => {
-            window.location.href = "Lou/home.html";
+            window.location.href = "home.html";
         }, 1500);
     });
 }
