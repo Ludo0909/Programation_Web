@@ -1,0 +1,335 @@
+/* ===== Style commun : connexion, création de compte, mot de passe oublié ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, sans-serif;
+    background: linear-gradient(135deg, #fff7ed 0%, #f8fafc 60%);
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+/* Carte principale */
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border-radius: 20px;
+    border-top: 6px solid #ea580c;
+    box-shadow: 0 12px 40px rgba(234, 88, 12, 0.15);
+    padding: 36px 32px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.logo {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ff7a18 0%, #ea580c 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(234, 88, 12, 0.3);
+}
+
+.logo svg {
+    width: 28px;
+    height: 28px;
+}
+
+.auth-header h1 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: #ea580c;
+}
+
+.auth-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Champs du formulaire */
+.field {
+    margin-bottom: 16px;
+}
+
+.field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: #ff7a18;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
+}
+
+.field input.invalid {
+    border-color: #dc2626;
+}
+
+.field input.valid {
+    border-color: #16a34a;
+}
+
+.hint {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.error {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #dc2626;
+    min-height: 0;
+}
+
+/* Champ mot de passe avec bouton afficher/masquer */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 70px;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: #ea580c;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+/* Liste des critères du mot de passe */
+.password-rules {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.password-rules li {
+    margin-bottom: 3px;
+}
+
+.password-rules li::before {
+    content: "✗ ";
+    color: #dc2626;
+}
+
+.password-rules li.ok {
+    color: #16a34a;
+}
+
+.password-rules li.ok::before {
+    content: "✓ ";
+    color: #16a34a;
+}
+
+/* Boutons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #ffffff;
+    background: linear-gradient(180deg, #ff7a18 0%, #ea580c 100%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(234, 88, 12, 0.3);
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: #ea580c;
+    border: 1.5px solid #ea580c;
+}
+
+/* Messages de succès / info */
+.message {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.message.show {
+    display: block;
+}
+
+.message.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.message.info {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+}
+
+.message.fail {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Étapes du mot de passe oublié */
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.steps-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.steps-indicator span {
+    width: 32px;
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+}
+
+.steps-indicator span.done {
+    background: #ea580c;
+}
+
+/* Liens en bas de la carte */
+.auth-footer {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.auth-footer a,
+.link-btn {
+    color: #ea580c;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover,
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Ligne « Se souvenir de moi » / « Mot de passe oublié » */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.form-options a {
+    color: #ea580c;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-options a:hover {
+    text-decoration: underline;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #475569;
+    cursor: pointer;
+}
+
+.remember input {
+    accent-color: #ea580c;
+    width: 16px;
+    height: 16px;
+}
+
+/* Deux champs côte à côte (nom / nom d'utilisateur) */
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+.row .field {
+    flex: 1;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 28px 20px;
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
