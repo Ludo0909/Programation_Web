@@ -1,267 +1,138 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat Supabase</title>
-
-  <style>
-    :root {
-      --bg: #f4f6f8;
-      --surface: #ffffff;
-      --text: #212529;
-      --text-muted: #6c757d;
-      --primary: #007bff;
-      --primary-text: #ffffff;
-      --bubble-other: #e9ecef;
-      --border: #dee2e6;
-    }
-
-    [data-theme="dark"] {
-      --bg: #121212;
-      --surface: #1e1e1e;
-      --text: #e0e0e0;
-      --text-muted: #888888;
-      --primary: #0d6efd;
-      --primary-text: #ffffff;
-      --bubble-other: #2d2d2d;
-      --border: #333333;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Barre latérale (Salons) */
-    aside {
-      width: 280px;
-      background-color: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-    }
-
-    .aside-header {
-      padding: 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #form-channel {
-      display: flex;
-      padding: 0.75rem;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    #form-channel input {
-      flex: 1;
-      padding: 0.5rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    #ul-channels {
-      list-style: none;
-      overflow-y: auto;
-      flex: 1;
-      padding: 0.5rem;
-    }
-
-    .channel-item {
-      width: 100%;
-      text-align: left;
-      padding: 0.6rem 0.8rem;
-      background: transparent;
-      border: none;
-      border-radius: 4px;
-      color: var(--text);
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
-
-    .channel-item:hover {
-      background-color: var(--bg);
-    }
-
-    .channel-item[aria-current="true"] {
-      background-color: var(--primary);
-      color: var(--primary-text);
-      font-weight: bold;
-    }
-
-    /* Zone de conversation */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background-color: var(--bg);
-    }
-
-    .chat-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
-
-    #button-back {
-      padding: 0.3rem 0.6rem;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    #span-channel-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    #div-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    /* Style des bulles de messages */
-    article {
-      max-width: 65%;
-      padding: 0.6rem 0.8rem;
-      border-radius: 8px;
-      background-color: var(--bubble-other);
-      align-self: flex-start;
-      display: flex;
-      flex-direction: column;
-    }
-
-    article.sent {
-      align-self: flex-end;
-      background-color: var(--primary);
-      color: var(--primary-text);
-    }
-
-    article header {
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: var(--text-muted);
-      margin-bottom: 0.2rem;
-    }
-
-    article.sent header {
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    article p {
-      font-size: 0.95rem;
-      word-break: break-word;
-    }
-
-    article time {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      align-self: flex-end;
-      margin-top: 0.25rem;
-    }
-
-    article.sent time {
-      color: rgba(255, 255, 255, 0.75);
-    }
-
-    /* Formulaire d'envoi */
-    #form-message {
-      display: flex;
-      padding: 0.75rem;
-      background-color: var(--surface);
-      border-top: 1px solid var(--border);
-      gap: 0.5rem;
-    }
-
-    #input-message {
-      flex: 1;
-      padding: 0.6rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-    }
-
-    button {
-      padding: 0.6rem 1rem;
-      background-color: var(--primary);
-      color: var(--primary-text);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    #button-signout {
-      background: transparent;
-      color: #dc3545;
-      border: 1px solid #dc3545;
-      padding: 0.3rem 0.6rem;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>Messagerie - Chat</title>
+  
+  <!-- Tes feuilles de style existantes -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- CDN Supabase & scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+  <script src="theme.js"></script>
   <script src="supabase-service.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
 
-  <aside>
-    <div class="aside-header">
-      <h2>Salons</h2>
-      <button id="button-signout">Quitter</button>
+  <!-- Barre latérale orange (identique à ton home.html) -->
+  <aside class="sidebar-orange">
+    <a href="home.html" class="sidebar-brand">
+      <div class="brand-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span class="status-indicator"></span>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a href="home.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="messagerie.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="groupes.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="contacts.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="parametre.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </a>
     </div>
-
-    <form id="form-channel">
-      <input type="text" id="input-channel" placeholder="Nom du salon..." required />
-      <button type="submit">+</button>
-    </form>
-
-    <ul id="ul-channels"></ul>
   </aside>
 
-  <main>
-    <div class="chat-header">
-      <button id="button-back">✕ Fermer</button>
-      <span id="span-channel-title">Sélectionnez un salon</span>
+  <!-- Zone de contenu principale -->
+  <main class="content p-4">
+    <header class="welcome-header mb-4">
+      <h1>Vos Conversations</h1>
+      <p>Sélectionnez un canal pour discuter en temps réel.</p>
+    </header>
+
+    <!-- Layout 2 volets calqué sur ton css.css -->
+    <div class="chat-hub-layout">
+      
+      <!-- Volet Gauche : Liste des canaux / contacts -->
+      <div class="chat-cards-list">
+        <form id="form-channel" class="d-flex gap-2 mb-2">
+          <input type="text" id="input-channel" class="form-control form-control-sm" placeholder="Créer un salon..." required />
+          <button type="submit" class="btn btn-primary btn-sm">+</button>
+        </form>
+
+        <!-- Liste dynamique des salons -->
+        <div id="ul-channels" class="d-flex flex-column gap-2"></div>
+      </div>
+
+      <!-- Volet Droit : Fenêtre de discussion -->
+      <div class="chat-window-card">
+        
+        <!-- Vue inactive par défaut si aucun salon sélectionné -->
+        <div id="chat-placeholder" class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <p class="mt-2">Sélectionnez une conversation à gauche</p>
+        </div>
+
+        <!-- Panel de chat actif (classe .chat-main de ton css.css) -->
+        <div id="chat-container" class="chat-main">
+          
+          <!-- En-tête du chat actif -->
+          <div class="chat-header">
+            <div class="avatar" id="header-avatar">#</div>
+            <div>
+              <h3 id="span-channel-title">Nom du salon</h3>
+              <span class="status-online">● en ligne</span>
+            </div>
+          </div>
+
+          <!-- Zone de défilement des bulles de messages -->
+          <div id="div-messages" class="messages-area"></div>
+
+          <!-- Barre de saisie inférieure -->
+          <form id="form-message" class="chat-input-bar">
+            <input type="text" id="input-message" placeholder="Votre message..." autocomplete="off" required />
+            <button type="submit">Envoyer</button>
+          </form>
+        </div>
+
+      </div>
     </div>
-
-    <div id="div-messages"></div>
-
-    <form id="form-message">
-      <input type="text" id="input-message" placeholder="Écrire un message..." autocomplete="off" required />
-      <button type="submit">Envoyer</button>
-    </form>
   </main>
 
 </body>

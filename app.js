@@ -2,15 +2,14 @@ let currentChannel = StorageService.readChannel();
 let currentUser = null;
 let unsubscribeMessages = null;
 
-// Éléments du DOM
 const inputChannel = document.getElementById("input-channel");
 const inputMessage = document.getElementById("input-message");
 const ulChannels = document.getElementById("ul-channels");
 const divMessages = document.getElementById("div-messages");
 const spanChannelTitle = document.getElementById("span-channel-title");
-const buttonSignout = document.getElementById("button-signout");
-
-// --- ÉVÉNEMENTS ---
+const headerAvatar = document.getElementById("header-avatar");
+const chatPlaceholder = document.getElementById("chat-placeholder");
+const chatContainer = document.getElementById("chat-container");
 
 // Créer un salon
 document.getElementById("form-channel")?.addEventListener("submit", async (e) => {
@@ -40,23 +39,6 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
   inputMessage.value = "";
 });
 
-// Bouton retour
-document.getElementById("button-back")?.addEventListener("click", () => {
-  if (unsubscribeMessages) unsubscribeMessages();
-  unsubscribeMessages = null;
-  divMessages.replaceChildren();
-  StorageService.clearSession();
-  currentChannel = null;
-  document.body.classList.remove("open");
-});
-
-// Déconnexion
-buttonSignout?.addEventListener("click", async () => {
-  await AuthService.signOut();
-  StorageService.clearSession();
-  window.location.replace("./signin.html");
-});
-
 // Sécurité : redirection si session expirée
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
@@ -65,35 +47,47 @@ AuthService.onSessionChange((event, session) => {
   }
 });
 
-// --- SALONS & MESSAGES ---
-
+// Salons (cartes de gauche avec classe .chat-card)
 async function loadChannels() {
   const { data: channels, error } = await ChatDatabase.fetchChannels();
   if (error) return;
 
   ulChannels.replaceChildren();
   channels.forEach((channel) => {
-    const li = document.createElement("li");
-    const btn = document.createElement("button");
-    btn.className = "channel-item";
-    btn.textContent = `# ${channel.name}`;
+    const card = document.createElement("div");
+    card.className = "chat-card p-3 rounded bg-white d-flex align-items-center gap-3";
+    
     if (currentChannel && channel.id === currentChannel.id) {
-      btn.setAttribute("aria-current", "true");
+      card.classList.add("active");
     }
-    btn.onclick = () => selectChannel(btn, channel);
-    li.appendChild(btn);
-    ulChannels.appendChild(li);
+
+    const firstLetter = channel.name.charAt(0).toUpperCase();
+    card.innerHTML = `
+      <div class="avatar">${firstLetter}</div>
+      <div class="overflow-hidden">
+        <h6 class="mb-0 text-truncate font-weight-bold"># ${channel.name}</h6>
+        <small class="text-muted">Canal public</small>
+      </div>
+    `;
+
+    card.onclick = () => selectChannel(card, channel);
+    ulChannels.appendChild(card);
   });
 }
 
-async function selectChannel(buttonElement, channel) {
-  document.querySelectorAll(".channel-item").forEach((b) => b.removeAttribute("aria-current"));
-  buttonElement.setAttribute("aria-current", "true");
+async function selectChannel(cardElement, channel) {
+  document.querySelectorAll(".chat-card").forEach((b) => b.classList.remove("active"));
+  cardElement.classList.add("active");
 
   currentChannel = channel;
   StorageService.writeChannel(channel);
-  spanChannelTitle.textContent = `# ${channel.name}`;
-  document.body.classList.add("open");
+
+  // Basculer du placeholder au chat
+  chatPlaceholder.style.display = "none";
+  chatContainer.classList.add("active");
+
+  spanChannelTitle.textContent = "# " + channel.name;
+  headerAvatar.textContent = channel.name.charAt(0).toUpperCase();
 
   if (unsubscribeMessages) unsubscribeMessages();
   unsubscribeMessages = ChatDatabase.subscribeToMessages(channel.id, appendMessage);
@@ -114,26 +108,29 @@ function appendMessage(message) {
   divMessages.scrollTop = divMessages.scrollHeight;
 }
 
+// Bulles de messages conformes aux classes de css.css (.message, .incoming, .outgoing)
 function displayMessage(message) {
-  const article = document.createElement("article");
-  if (currentUser && message.user_id === currentUser.id) {
-    article.classList.add("sent");
+  const isMine = currentUser && (message.user_id === currentUser.id || message.username === currentUser.email);
+
+  const msgDiv = document.createElement("div");
+  msgDiv.className = `message ${isMine ? "outgoing" : "incoming"}`;
+
+  const textP = document.createElement("p");
+  textP.textContent = message.content;
+
+  const timeSpan = document.createElement("span");
+  timeSpan.className = "time";
+  
+  if (message.created_at) {
+    const d = new Date(message.created_at);
+    timeSpan.textContent = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   }
 
-  const header = document.createElement("header");
-  header.textContent = message.username;
-
-  const p = document.createElement("p");
-  p.textContent = message.content;
-
-  const time = document.createElement("time");
-  time.textContent = message.created_at ? message.created_at.slice(0, 19).replace("T", " ") : "";
-
-  article.append(header, p, time);
-  divMessages.appendChild(article);
+  msgDiv.append(textP, timeSpan);
+  divMessages.appendChild(msgDiv);
 }
 
-// --- DÉMARRAGE ---
+// Démarrage
 async function init() {
   const { user } = await AuthService.getUser();
   if (!user) {
@@ -146,8 +143,11 @@ async function init() {
   ChatDatabase.subscribeToChannels(() => loadChannels());
 
   if (currentChannel) {
-    spanChannelTitle.textContent = `# ${currentChannel.name}`;
-    document.body.classList.add("open");
+    chatPlaceholder.style.display = "none";
+    chatContainer.classList.add("active");
+    spanChannelTitle.textContent = "# " + currentChannel.name;
+    headerAvatar.textContent = currentChannel.name.charAt(0).toUpperCase();
+
     unsubscribeMessages = ChatDatabase.subscribeToMessages(currentChannel.id, appendMessage);
     await loadMessages();
   }
