@@ -1,9 +1,11 @@
 let currentChannel = StorageService.readChannel();
 let currentUser = null;
 let unsubscribeMessages = null;
+let allChannels = [];
 
 const inputChannel = document.getElementById("input-channel");
 const inputMessage = document.getElementById("input-message");
+const searchChannels = document.getElementById("search-channels");
 const ulChannels = document.getElementById("ul-channels");
 const divMessages = document.getElementById("div-messages");
 const spanChannelTitle = document.getElementById("span-channel-title");
@@ -11,13 +13,37 @@ const headerAvatar = document.getElementById("header-avatar");
 const chatPlaceholder = document.getElementById("chat-placeholder");
 const chatContainer = document.getElementById("chat-container");
 
-// Créer un salon (avec user id)
+// Créer un salon via la fenêtre modale
 document.getElementById("form-channel")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = inputChannel.value.trim();
   if (!name || !currentUser) return;
-  await ChatDatabase.createChannel(name, currentUser.id);
+
+  const { data: newChan, error } = await ChatDatabase.createChannel(name, currentUser.id);
+  if (error) {
+    alert("Impossible de créer le salon : " + error.message);
+    return;
+  }
+
   inputChannel.value = "";
+  
+  // Fermer la modale Bootstrap
+  const modalEl = document.getElementById("newChannelModal");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  if (modal) modal.hide();
+
+  await loadChannels();
+  if (newChan) {
+    const card = document.querySelector(`[data-id="${newChan.id}"]`);
+    if (card) selectChannel(card, newChan);
+  }
+});
+
+// Filtrer les salons en direct
+searchChannels?.addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  const filtered = allChannels.filter(c => c.name.toLowerCase().includes(query));
+  renderChannels(filtered);
 });
 
 // Envoyer un message
@@ -26,7 +52,9 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
   const content = inputMessage.value.trim();
   if (!content || !currentChannel || !currentUser) return;
 
-  const displayName = currentUser.user_metadata?.username || currentUser.email;
+  const displayName = currentUser.user_metadata?.username || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+
+  inputMessage.value = "";
 
   const { error } = await ChatDatabase.sendMessage(
     currentChannel.id,
@@ -37,12 +65,10 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
 
   if (error) {
     console.error("Erreur d'envoi :", error.message);
-    return;
   }
-  inputMessage.value = "";
 });
 
-// Sécurité : redirection si session expirée (vers index.html)
+// Redirection si déconnecté
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
     StorageService.clearSession();
@@ -50,15 +76,26 @@ AuthService.onSessionChange((event, session) => {
   }
 });
 
-// Salons (cartes de gauche avec classe .chat-card)
+// Charger les salons
 async function loadChannels() {
   const { data: channels, error } = await ChatDatabase.fetchChannels();
   if (error) return;
+  allChannels = channels || [];
+  renderChannels(allChannels);
+}
 
+function renderChannels(channels) {
   ulChannels.replaceChildren();
+
+  if (channels.length === 0) {
+    ulChannels.innerHTML = '<div class="text-center text-muted small py-4">Aucun salon trouvé.</div>';
+    return;
+  }
+
   channels.forEach((channel) => {
     const card = document.createElement("div");
-    card.className = "chat-card p-3 rounded bg-white d-flex align-items-center gap-3";
+    card.className = "chat-card";
+    card.setAttribute("data-id", channel.id);
     
     if (currentChannel && channel.id === currentChannel.id) {
       card.classList.add("active");
@@ -68,7 +105,7 @@ async function loadChannels() {
     card.innerHTML = `
       <div class="avatar">${firstLetter}</div>
       <div class="overflow-hidden">
-        <h6 class="mb-0 text-truncate font-weight-bold"># ${channel.name}</h6>
+        <h6 class="mb-0 text-truncate fw-bold"># ${channel.name}</h6>
         <small class="text-muted">Canal public</small>
       </div>
     `;
@@ -110,7 +147,6 @@ function appendMessage(message) {
   divMessages.scrollTop = divMessages.scrollHeight;
 }
 
-// Bulles de messages (.message, .incoming, .outgoing)
 function displayMessage(message) {
   const isMine = currentUser && (message.created_by === currentUser.id);
 
@@ -123,16 +159,15 @@ function displayMessage(message) {
   const timeSpan = document.createElement("span");
   timeSpan.className = "time";
   
-  if (message.created_at) {
-    const d = new Date(message.created_at);
-    timeSpan.textContent = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} - ${message.username || 'Anonyme'}`;
-  }
+  const d = message.created_at ? new Date(message.created_at) : new Date();
+  const timeFormatted = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+  timeSpan.textContent = isMine ? timeFormatted : `${timeFormatted} · ${message.username || 'Anonyme'}`;
 
   msgDiv.append(textP, timeSpan);
   divMessages.appendChild(msgDiv);
 }
 
-// Démarrage
+// Initialisation au chargement
 async function init() {
   const { user } = await AuthService.getUser();
   if (!user) {
@@ -145,13 +180,10 @@ async function init() {
   ChatDatabase.subscribeToChannels(() => loadChannels());
 
   if (currentChannel) {
-    if (chatPlaceholder) chatPlaceholder.style.display = "none";
-    if (chatContainer) chatContainer.classList.add("active");
-    if (spanChannelTitle) spanChannelTitle.textContent = "# " + currentChannel.name;
-    if (headerAvatar) headerAvatar.textContent = currentChannel.name.charAt(0).toUpperCase();
-
-    unsubscribeMessages = ChatDatabase.subscribeToMessages(currentChannel.id, appendMessage);
-    await loadMessages();
+    const activeCard = document.querySelector(`[data-id="${currentChannel.id}"]`);
+    if (activeCard) {
+      selectChannel(activeCard, currentChannel);
+    }
   }
 }
 
