@@ -16,21 +16,23 @@ document.getElementById("form-channel")?.addEventListener("submit", async (e) =>
   e.preventDefault();
   const name = inputChannel.value.trim();
   if (!name || !currentUser) return;
-  await ChatDatabase.createChannel(name, currentUser.id); // On passe l'id
+  await ChatDatabase.createChannel(name, currentUser.id);
   inputChannel.value = "";
 });
 
-// Envoyer un message (avec variables du schéma)
+// Envoyer un message
 document.getElementById("form-message")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const content = inputMessage.value.trim();
   if (!content || !currentChannel || !currentUser) return;
 
+  const displayName = currentUser.user_metadata?.username || currentUser.email;
+
   const { error } = await ChatDatabase.sendMessage(
     currentChannel.id,
     content,
-    currentUser.email, // Devient le "username"
-    currentUser.id     // Enregistré dans "created_by"
+    displayName,
+    currentUser.id
   );
 
   if (error) {
@@ -40,11 +42,11 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
   inputMessage.value = "";
 });
 
-// Sécurité : redirection si session expirée
+// Sécurité : redirection si session expirée (vers index.html)
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
     StorageService.clearSession();
-    window.location.replace("./signin.html");
+    window.location.replace("./index.html");
   }
 });
 
@@ -83,12 +85,11 @@ async function selectChannel(cardElement, channel) {
   currentChannel = channel;
   StorageService.writeChannel(channel);
 
-  // Basculer du placeholder au chat
-  chatPlaceholder.style.display = "none";
-  chatContainer.classList.add("active");
+  if (chatPlaceholder) chatPlaceholder.style.display = "none";
+  if (chatContainer) chatContainer.classList.add("active");
 
-  spanChannelTitle.textContent = "# " + channel.name;
-  headerAvatar.textContent = channel.name.charAt(0).toUpperCase();
+  if (spanChannelTitle) spanChannelTitle.textContent = "# " + channel.name;
+  if (headerAvatar) headerAvatar.textContent = channel.name.charAt(0).toUpperCase();
 
   if (unsubscribeMessages) unsubscribeMessages();
   unsubscribeMessages = ChatDatabase.subscribeToMessages(channel.id, appendMessage);
@@ -109,9 +110,8 @@ function appendMessage(message) {
   divMessages.scrollTop = divMessages.scrollHeight;
 }
 
-// Bulles de messages conformes aux classes de css.css (.message, .incoming, .outgoing)
+// Bulles de messages (.message, .incoming, .outgoing)
 function displayMessage(message) {
-  // Est-ce mon message ? On vérifie avec created_by (ton schéma de base)
   const isMine = currentUser && (message.created_by === currentUser.id);
 
   const msgDiv = document.createElement("div");
@@ -136,7 +136,7 @@ function displayMessage(message) {
 async function init() {
   const { user } = await AuthService.getUser();
   if (!user) {
-    window.location.replace("./signin.html");
+    window.location.replace("./index.html");
     return;
   }
   currentUser = user;
@@ -145,10 +145,10 @@ async function init() {
   ChatDatabase.subscribeToChannels(() => loadChannels());
 
   if (currentChannel) {
-    chatPlaceholder.style.display = "none";
-    chatContainer.classList.add("active");
-    spanChannelTitle.textContent = "# " + currentChannel.name;
-    headerAvatar.textContent = currentChannel.name.charAt(0).toUpperCase();
+    if (chatPlaceholder) chatPlaceholder.style.display = "none";
+    if (chatContainer) chatContainer.classList.add("active");
+    if (spanChannelTitle) spanChannelTitle.textContent = "# " + currentChannel.name;
+    if (headerAvatar) headerAvatar.textContent = currentChannel.name.charAt(0).toUpperCase();
 
     unsubscribeMessages = ChatDatabase.subscribeToMessages(currentChannel.id, appendMessage);
     await loadMessages();
