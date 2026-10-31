@@ -6,11 +6,11 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_
 
 // --- 2. STOCKAGE LOCAL & THÈMES ---
 const StorageService = {
-  KEY_THEME: "keyCurrentTheme",
+  KEY_THEME: "site-theme",
   KEY_CHANNEL: "keyCurrentChannel",
 
   readTheme() {
-    try { return localStorage.getItem(this.KEY_THEME) || "system"; } catch { return "system"; }
+    return localStorage.getItem(this.KEY_THEME) || "light";
   },
 
   writeTheme(theme) {
@@ -19,9 +19,11 @@ const StorageService = {
   },
 
   applyTheme(theme) {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = theme === "dark" || (theme === "system" && prefersDark);
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark-theme");
+    } else {
+      document.documentElement.classList.remove("dark-theme");
+    }
   },
 
   readChannel() {
