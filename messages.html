@@ -2,7 +2,8 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Messagerie - Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WorkFlow - Messagerie</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,6 +12,8 @@
   <script src="app.js" defer></script>
 </head>
 <body>
+
+  <!-- Menu latéral -->
   <aside class="sidebar-orange">
     <a href="home.html" class="sidebar-brand">
       <div class="brand-avatar">
@@ -18,13 +21,12 @@
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
-        <span class="status-indicator"></span>
       </div>
     </a>
     <nav class="sidebar-nav">
       <ul>
         <li>
-          <a href="home.html" class="nav-item">
+          <a href="home.html" class="nav-item" title="Accueil">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -32,14 +34,14 @@
           </a>
         </li>
         <li>
-          <a href="messages.html" class="nav-item active">
+          <a href="messages.html" class="nav-item active" title="Messagerie">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
           </a>
         </li>
         <li>
-          <a href="groupes.html" class="nav-item">
+          <a href="groupes.html" class="nav-item" title="Groupes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
               <circle cx="9" cy="7" r="4"></circle>
@@ -49,7 +51,7 @@
           </a>
         </li>
         <li>
-          <a href="contacts.html" class="nav-item">
+          <a href="contacts.html" class="nav-item" title="Contacts">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
               <circle cx="9" cy="7" r="4"></circle>
@@ -61,7 +63,7 @@
       </ul>
     </nav>
     <div class="sidebar-bottom">
-      <a href="parametre.html" class="nav-item">
+      <a href="parametre.html" class="nav-item" title="Paramètres">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -70,46 +72,92 @@
     </div>
   </aside>
 
-  <main class="content p-4">
-    <header class="welcome-header mb-4">
+  <!-- Zone de contenu -->
+  <main class="content">
+    <header class="welcome-header">
       <h1>Vos Conversations</h1>
-      <p>Sélectionnez un canal pour discuter en temps réel.</p>
+      <p>Échangez en direct avec vos camarades dans vos canaux de discussion.</p>
     </header>
 
     <div class="chat-hub-layout">
+      <!-- Liste des salons -->
       <div class="chat-cards-list">
-        <form id="form-channel" class="d-flex gap-2 mb-2">
-          <input type="text" id="input-channel" class="form-control form-control-sm" placeholder="Créer un salon..." required />
-          <button type="submit" class="btn btn-primary btn-sm">+</button>
-        </form>
-        <div id="ul-channels" class="d-flex flex-column gap-2"></div>
-      </div>
-      <div class="chat-window-card">
-        <div id="chat-placeholder" class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-          <p class="mt-2">Sélectionnez une conversation à gauche</p>
-        </div>
-        <div id="chat-container" class="chat-main">
-          
-          <div class="chat-header">
-            <div class="avatar" id="header-avatar">#</div>
-            <div>
-              <h3 id="span-channel-title">Nom du salon</h3>
-              <span class="status-online">● en ligne</span>
-            </div>
+        <div class="chat-list-header">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 fw-bold">Salons</h6>
+            <button class="btn btn-sm btn-outline-warning text-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#newChannelModal">
+              + Créer
+            </button>
           </div>
-          <div id="div-messages" class="messages-area"></div>
-          <form id="form-message" class="chat-input-bar">
-            <input type="text" id="input-message" placeholder="Votre message..." autocomplete="off" required />
-            <button type="submit">Envoyer</button>
-          </form>
+          <input type="text" id="search-channels" class="form-control form-control-sm" placeholder="Rechercher un salon...">
+        </div>
+        <div id="ul-channels" class="chat-list-scroll"></div>
+      </div>
+
+      <!-- Fenêtre de chat -->
+      <div class="chat-window-card">
+        <!-- Placeholder par défaut -->
+        <div id="chat-placeholder">
+          <div class="placeholder-icon-wrap">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h5 class="fw-bold text-dark mb-1">Aucune conversation sélectionnée</h5>
+          <p class="small text-muted">Choisissez un salon à gauche ou créez-en un nouveau.</p>
         </div>
 
+        <!-- Conversation active -->
+        <div id="chat-container" class="chat-main">
+          <div class="chat-header">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar" id="header-avatar">#</div>
+              <div>
+                <h5 class="mb-0 fw-bold" id="span-channel-title">Nom du salon</h5>
+                <span class="status-online">● en direct</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="div-messages" class="messages-area"></div>
+
+          <form id="form-message" class="chat-input-bar">
+            <input type="text" id="input-message" placeholder="Écrivez votre message..." autocomplete="off" required />
+            <button type="submit">
+              <span>Envoyer</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </main>
 
+  <!-- Modale de création de salon -->
+  <div class="modal fade" id="newChannelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Créer un nouveau salon</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="form-channel">
+          <div class="modal-body">
+            <label for="input-channel" class="form-label small text-muted">Nom du canal (ex : Projet-Web, Général...)</label>
+            <input type="text" id="input-channel" class="form-control" placeholder="Entrez le nom du salon..." required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-warning text-white fw-bold">Créer le salon</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
