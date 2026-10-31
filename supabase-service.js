@@ -1,19 +1,16 @@
+// --- 1. CONFIGURATION SUPABASE ---
+const SUPABASE_URL = "https://qgtpterfnrltrmsygbrh.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_X8CN-z4V1TrT3eNmq_GrmQ_nNfDNrRU";
 
-const SUPABASE_URL=https://pwqifxakeouwsuycvngx.supabase.co
-const SUPABASE_KEY=sb_publishable_rrbz_Z59y-VTRvSmjvsuew_wyZX-XjK
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+// --- 2. STOCKAGE LOCAL & THÈMES ---
 const StorageService = {
   KEY_THEME: "keyCurrentTheme",
   KEY_CHANNEL: "keyCurrentChannel",
 
   readTheme() {
-    try {
-      return localStorage.getItem(this.KEY_THEME) || "system";
-    } catch {
-      return "system";
-    }
+    try { return localStorage.getItem(this.KEY_THEME) || "system"; } catch { return "system"; }
   },
 
   writeTheme(theme) {
@@ -28,11 +25,7 @@ const StorageService = {
   },
 
   readChannel() {
-    try {
-      return JSON.parse(sessionStorage.getItem(this.KEY_CHANNEL));
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(sessionStorage.getItem(this.KEY_CHANNEL)); } catch { return null; }
   },
 
   writeChannel(channel) {
@@ -74,30 +67,38 @@ const AuthService = {
   }
 };
 
-// --- 4. BASE DE DONNÉES (CHANNELS & MESSAGES) ---
+// --- 4. BASE DE DONNÉES (CORRIGÉE SELON TON SCHÉMA) ---
 const ChatDatabase = {
   async fetchChannels() {
-    return await supabaseClient.from("channels").select("*").order("name");
+    // Récupère l'id, le nom et created_by de la table channels
+    return await supabaseClient.from("channels").select("id, name, created_by").order("name");
   },
 
-  async createChannel(name) {
-    return await supabaseClient.from("channels").insert({ name }).select().single();
+  async createChannel(name, userId) {
+    // Insère le salon en enregistrant qui l'a créé (created_by)
+    return await supabaseClient.from("channels").insert({ 
+      name, 
+      created_by: userId 
+    }).select().single();
   },
 
   async fetchMessages(channelId) {
+    // Sélectionne les messages pour un salon (id, content, created_at, created_by, "channels.id", username)
     return await supabaseClient
       .from("messages")
-      .select("id, content, created_at, user_id, username")
-      .eq("channel_id", channelId)
+      .select('id, content, created_at, created_by, "channels.id", username')
+      .eq("channels.id", channelId) // Ton lien vers les salons
       .limit(50)
       .order("created_at", { ascending: true });
   },
 
-  async sendMessage(channelId, content, username) {
+  async sendMessage(channelId, content, username, userId) {
+    // Insère le message en se liant à channels.id, created_by et en fournissant le username
     return await supabaseClient.from("messages").insert({
-      channel_id: channelId,
+      "channels.id": channelId, // Clé avec point corrigée
       content,
-      username
+      username,
+      created_by: userId // Relié à l'utilisateur
     });
   },
 
@@ -115,7 +116,12 @@ const ChatDatabase = {
       .channel(`messages-${channelId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages", filter: `channel_id=eq.${channelId}` },
+        { 
+          event: "INSERT", 
+          schema: "public", 
+          table: "messages", 
+          filter: `"channels.id"=eq.${channelId}` // Filtrage exact avec point et guillemets
+        },
         (payload) => onNewMessage(payload.new)
       )
       .subscribe();

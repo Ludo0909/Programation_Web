@@ -11,16 +11,16 @@ const headerAvatar = document.getElementById("header-avatar");
 const chatPlaceholder = document.getElementById("chat-placeholder");
 const chatContainer = document.getElementById("chat-container");
 
-// Créer un salon
+// Créer un salon (avec user id)
 document.getElementById("form-channel")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = inputChannel.value.trim();
-  if (!name) return;
-  await ChatDatabase.createChannel(name);
+  if (!name || !currentUser) return;
+  await ChatDatabase.createChannel(name, currentUser.id); // On passe l'id
   inputChannel.value = "";
 });
 
-// Envoyer un message
+// Envoyer un message (avec variables du schéma)
 document.getElementById("form-message")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const content = inputMessage.value.trim();
@@ -29,7 +29,8 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
   const { error } = await ChatDatabase.sendMessage(
     currentChannel.id,
     content,
-    currentUser.email
+    currentUser.email, // Devient le "username"
+    currentUser.id     // Enregistré dans "created_by"
   );
 
   if (error) {
@@ -110,7 +111,8 @@ function appendMessage(message) {
 
 // Bulles de messages conformes aux classes de css.css (.message, .incoming, .outgoing)
 function displayMessage(message) {
-  const isMine = currentUser && (message.user_id === currentUser.id || message.username === currentUser.email);
+  // Est-ce mon message ? On vérifie avec created_by (ton schéma de base)
+  const isMine = currentUser && (message.created_by === currentUser.id);
 
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${isMine ? "outgoing" : "incoming"}`;
@@ -123,7 +125,7 @@ function displayMessage(message) {
   
   if (message.created_at) {
     const d = new Date(message.created_at);
-    timeSpan.textContent = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    timeSpan.textContent = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} - ${message.username || 'Anonyme'}`;
   }
 
   msgDiv.append(textP, timeSpan);

@@ -9,7 +9,6 @@ html.dark-theme body {
   color: #f8fafc;
 }
 
-/* Titres et textes généraux */
 html.dark-theme .welcome-header h1,
 html.dark-theme .content h2,
 html.dark-theme .card-info h3 {
