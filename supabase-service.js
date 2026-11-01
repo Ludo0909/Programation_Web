@@ -128,3 +128,40 @@ const ChatDatabase = {
     return () => supabaseClient.removeChannel(channel);
   }
 };
+
+const EventDatabase = {
+  // Récupérer les événements d'un salon précis
+  async fetchEvents(channelId) {
+    return await supabaseClient
+      .from("events")
+      .select("*")
+      .eq("channel_id", channelId)
+      .order("start_time", { ascending: true });
+  },
+
+  // Récupérer les événements officiels (non occupés) pour le tableau de bord
+  async fetchUpcomingMeetings() {
+    const now = new Date().toISOString();
+    return await supabaseClient
+      .from("events")
+      .select("id, title, start_time, end_time, category")
+      .neq("category", "occupe") // Exclut les indisponibilités
+      .gte("start_time", now)
+      .order("start_time", { ascending: true })
+      .limit(3);
+  },
+
+  // Ajouter un nouvel événement ou créneau d'indisponibilité
+  async addEvent({ title, startTime, endTime, category, channelId, userId }) {
+    return await supabaseClient
+      .from("events")
+      .insert({
+        title,
+        start_time: startTime,
+        end_time: endTime,
+        category, // "reunion", "projet" ou "occupe"
+        channel_id: channelId,
+        user_id: userId
+      });
+  }
+};
