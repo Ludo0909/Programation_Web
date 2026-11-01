@@ -69,38 +69,35 @@ const AuthService = {
   }
 };
 
-// --- 4. BASE DE DONNÉES (CORRIGÉE SELON TON SCHÉMA) ---
+// --- 4. BASE DE DONNÉES (CORRIGÉE SELON TON SCHÉMA AVEC "channels.id") ---
 const ChatDatabase = {
   async fetchChannels() {
-    // Récupère l'id, le nom et created_by de la table channels
     return await supabaseClient.from("channels").select("id, name, created_by").order("name");
   },
 
   async createChannel(name, userId) {
-    // Insère le salon en enregistrant qui l'a créé (created_by)
     return await supabaseClient.from("channels").insert({ 
       name, 
       created_by: userId 
     }).select().single();
   },
-
+  
   async fetchMessages(channelId) {
-    // Sélectionne les messages pour un salon (id, content, created_at, created_by, "channels.id", username)
+    // Utilisation de .filter avec guillemets stricts pour éviter la fausse jointure PostgREST
     return await supabaseClient
       .from("messages")
       .select('id, content, created_at, created_by, "channels.id", username')
-      .eq("channels.id", channelId) // Ton lien vers les salons
+      .filter('"channels.id"', 'eq', channelId)
       .limit(50)
       .order("created_at", { ascending: true });
   },
 
   async sendMessage(channelId, content, username, userId) {
-    // Insère le message en se liant à channels.id, created_by et en fournissant le username
     return await supabaseClient.from("messages").insert({
-      "channels.id": channelId, // Clé avec point corrigée
+      "channels.id": channelId,
       content,
       username,
-      created_by: userId // Relié à l'utilisateur
+      created_by: userId
     });
   },
 
@@ -121,10 +118,14 @@ const ChatDatabase = {
         { 
           event: "INSERT", 
           schema: "public", 
-          table: "messages", 
-          filter: `"channels.id"=eq.${channelId}` // Filtrage exact avec point et guillemets
+          table: "messages"
         },
-        (payload) => onNewMessage(payload.new)
+        (payload) => {
+          // Filtrage côté client car Postgres Realtime gère mal les filtres contenant un point
+          if (payload.new && String(payload.new["channels.id"]) === String(channelId)) {
+            onNewMessage(payload.new);
+          }
+        }
       )
       .subscribe();
 
