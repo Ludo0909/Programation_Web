@@ -1,181 +1,254 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <title>WorkFlow</title>
+<head>
     <meta charset="utf-8">
+    <title>WorkFlow - Accueil</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-service.js"></script>
-    <body>
-        <aside class="sidebar-orange">
-            <a href="index.php" class="sidebar-brand">
-                <div class="brand-avatar">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span class="status-indicator"></span>
-                </div>
-            </a>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="home.html" class="nav-item active">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="messages.html" class="nav-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            <span class="nav-badge">3</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="groupes.html" class="nav-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="contacts.html" class="nav-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-bottom">
-                <a href="parametre.html" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                </a>
+</head>
+<body>
+    <!-- Barre latérale -->
+    <aside class="sidebar-orange">
+        <a href="home.html" class="sidebar-brand">
+            <div class="brand-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
             </div>
-        </aside>
-        <main class="content">
-            <header class="welcome-header">
-    <h1>Bienvenue sur votre espace</h1>
-    <p>Retrouvez vos conversations récentes, vos groupes et les dernières actualités de la plateforme.</p>
-</header>
-            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Mise à jour">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Nouvelle mise à jour disponible !</h5>
-        <p>Interface repensée, envoi rapide et performances améliorées pour vos conversations.</p>
-      </div>
-    </div>
+        </a>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="home.html" class="nav-item active" title="Accueil">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="messages.html" class="nav-item" title="Messagerie">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="groupes.html" class="nav-item" title="Groupes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="contacts.html" class="nav-item" title="Contacts">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="7" r="4"></circle>
+                            <path d="M5.5 21a8.38 8.38 0 0 1 13 0"></path>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="parametre.html" class="nav-item" title="Paramètres">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </a>
+        </div>
+    </aside>
 
-    <div class="carousel-item">
-      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Espaces de groupe">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Espaces de groupe simplifiés</h5>
-        <p>Discutez facilement à plusieurs, partagez vos projets et restez synchronisés avec votre équipe.</p>
-      </div>
-    </div>
-
-    <div class="carousel-item">
-      <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&h=450&q=80" class="d-block w-100" alt="Sécurité renforcée">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Sécurité et confidentialité renforcées</h5>
-        <p>Vos messages et données personnelles restent protégés en continu.</p>
-      </div>
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Précédent</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Suivant</span>
-  </button>
-</div>
-<ul id="ma-liste"></ul>
-            <section class="categories-section">
-                <h2>Catégories</h2>
-                <div class="cards-grid">
-                    <a href="accueil.php" class="card">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        <div class="card-info">
-                            <h3>Accueil</h3>
-                            <p>bla bla</p>
-                        </div>
-                    </a>
-                    <a href="galerie.php" class="card">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                        <div class="card-info">
-                            <h3>Messagerie</h3>
-                            <p>blabla</p>
-                        </div>
-                    </a>
-                    <a href="messages.php" class="card">
-                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        <div class="card-info">
-                            <h3>Groupe</h3>
-                            <p>blabla</p>
-                        </div>
-                    </a>
-                    <a href="contact.php" class="card">
-                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        <div class="card-info">
-                            <h3>Contact</h3>
-                            <p>blabla</p>
-                        </div>
-                    </a>
-                    <a href="parametre.html" class="card">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                        <div class="card-info">
-                            <h3>Paramètres</h3>
-                            <p>blabla</p>
-                        </div>
-                    </a>
+    <!-- Zone principale -->
+    <main class="content">
+        <!-- 1. Bannière d'accueil -->
+        <section class="home-hero">
+            <div class="hero-text">
+                <span class="hero-badge">Espace Étudiant</span>
+                <h1>Bonjour, <span id="user-display-name">Étudiant</span> 👋</h1>
+                <p>Prêt pour vos cours ? Suivez vos discussions d'équipe et vos tâches du jour en direct.</p>
+                <div class="hero-actions">
+                    <a href="messages.html" class="btn-hero-primary">Ouvrir le Chat</a>
+                    <a href="groupes.html" class="btn-hero-secondary">Mes groupes</a>
                 </div>
-            </section>
-        </main>
-        <script src="https://unpkg.com/lucide@latest"></script>
-        <script>
-            lucide.createIcons();
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+            </div>
+        </section>
+
+        <!-- 2. Statistiques clés -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="stat-channels">--</h3>
+                    <p>Salons disponibles</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>En ligne</h3>
+                    <p>Statut Supabase</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="current-time">--:--</h3>
+                    <p id="current-date">Aujourd'hui</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Grille Dashboard (Salons récents & To-Do List) -->
+        <section class="dashboard-grid">
+            <!-- Colonne Salons Récents -->
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <h2>Salons récents</h2>
+                    <a href="messages.html" class="dash-link">Tout voir →</a>
+                </div>
+                <div id="home-channels-list" class="quick-channels-list">
+                    <div class="empty-state">Chargement des salons...</div>
+                </div>
+            </div>
+
+            <!-- Colonne Bloc-Notes / Tâches -->
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <h2>Mes devoirs & rappels</h2>
+                    <span class="badge-count" id="todo-count">0</span>
+                </div>
+                <form id="todo-form" class="todo-input-group">
+                    <input type="text" id="todo-input" placeholder="Ex: Rendu de projet vendredi..." required>
+                    <button type="submit">+</button>
+                </form>
+                <ul id="todo-list" class="todo-items"></ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Script de dynamisation de l'accueil -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // 1. Horloge & Date
+            const timeEl = document.getElementById("current-time");
+            const dateEl = document.getElementById("current-date");
+            const updateClock = () => {
+                const now = new Date();
+                timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                dateEl.textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+            };
+            updateClock();
+            setInterval(updateClock, 30000);
+
+            // 2. Utilisateur connecté
+            const { user } = await AuthService.getUser();
+            if (user) {
+                const name = user.user_metadata?.username || user.email.split('@')[0];
+                document.getElementById("user-display-name").textContent = name;
+            }
+
+            // 3. Charger le nombre et l'aperçu des salons Supabase
+            try {
+                const { data: channels } = await ChatDatabase.fetchChannels();
+                const container = document.getElementById("home-channels-list");
+                const statChannels = document.getElementById("stat-channels");
+                
+                if (channels && channels.length > 0) {
+                    statChannels.textContent = channels.length;
+                    container.innerHTML = channels.slice(0, 4).map(ch => `
+                        <a href="messages.html" class="quick-channel-item">
+                            <span class="channel-hashtag">#</span>
+                            <div class="channel-meta">
+                                <strong>${ch.name}</strong>
+                                <small>Accéder à la discussion</small>
+                            </div>
+                            <span class="channel-arrow">→</span>
+                        </a>
+                    `).join("");
+                } else {
+                    statChannels.textContent = "0";
+                    container.innerHTML = '<div class="empty-state">Aucun salon pour le moment.</div>';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
+            // 4. To-Do List simple persistante (localStorage)
+            const todoForm = document.getElementById("todo-form");
+            const todoInput = document.getElementById("todo-input");
+            const todoList = document.getElementById("todo-list");
+            const todoCount = document.getElementById("todo-count");
+
+            let todos = JSON.parse(localStorage.getItem("workflow_todos") || "[]");
+
+            const renderTodos = () => {
+                todoCount.textContent = todos.length;
+                if (todos.length === 0) {
+                    todoList.innerHTML = '<li class="empty-todo">Aucune tâche pour aujourd\'hui !</li>';
+                    return;
+                }
+                todoList.innerHTML = todos.map((item, index) => `
+                    <li class="todo-item ${item.done ? 'done' : ''}">
+                        <label>
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${index})">
+                            <span>${item.text}</span>
+                        </label>
+                        <button onclick="removeTodo(${index})" class="todo-del">×</button>
+                    </li>
+                `).join("");
+            };
+
+            window.toggleTodo = (index) => {
+                todos[index].done = !todos[index].done;
+                localStorage.setItem("workflow_todos", JSON.stringify(todos));
+                renderTodos();
+            };
+
+            window.removeTodo = (index) => {
+                todos.splice(index, 1);
+                localStorage.setItem("workflow_todos", JSON.stringify(todos));
+                renderTodos();
+            };
+
+            todoForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const text = todoInput.value.trim();
+                if (!text) return;
+                todos.push({ text, done: false });
+                localStorage.setItem("workflow_todos", JSON.stringify(todos));
+                todoInput.value = "";
+                renderTodos();
+            });
+
+            renderTodos();
+        });
+    </script>
+</body>
 </html>
