@@ -83,18 +83,17 @@ const ChatDatabase = {
   },
   
   async fetchMessages(channelId) {
-    // Utilisation de .filter avec guillemets stricts pour éviter la fausse jointure PostgREST
     return await supabaseClient
       .from("messages")
-      .select('id, content, created_at, created_by, "channels.id", username')
-      .filter('"channels.id"', 'eq', channelId)
+      .select("id, content, created_at, created_by, channel_id, username")
+      .eq("channel_id", channelId)
       .limit(50)
       .order("created_at", { ascending: true });
   },
 
   async sendMessage(channelId, content, username, userId) {
     return await supabaseClient.from("messages").insert({
-      "channels.id": channelId,
+      channel_id: channelId,
       content,
       username,
       created_by: userId
@@ -118,14 +117,10 @@ const ChatDatabase = {
         { 
           event: "INSERT", 
           schema: "public", 
-          table: "messages"
+          table: "messages",
+          filter: `channel_id=eq.${channelId}`
         },
-        (payload) => {
-          // Filtrage côté client car Postgres Realtime gère mal les filtres contenant un point
-          if (payload.new && String(payload.new["channels.id"]) === String(channelId)) {
-            onNewMessage(payload.new);
-          }
-        }
+        (payload) => onNewMessage(payload.new)
       )
       .subscribe();
 
