@@ -87,17 +87,18 @@ const ChatDatabase = {
       .from("messages")
       .select("id, content, created_at, created_by, channel_id, username")
       .eq("channel_id", channelId)
-      .limit(50)
       .order("created_at", { ascending: true });
   },
 
   async sendMessage(channelId, content, username, userId) {
-    return await supabaseClient.from("messages").insert({
-      channel_id: channelId,
-      content,
-      username,
-      created_by: userId
-    });
+    return await supabaseClient.from("messages").insert([
+      {
+        channel_id: channelId,
+        content: content,
+        username: username,
+        created_by: userId
+      }
+    ]);
   },
 
   subscribeToChannels(onNewChannel) {
