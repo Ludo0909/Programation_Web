@@ -188,3 +188,125 @@ async function init() {
 }
 
 init();
+
+let currentCalDate = new Date();
+let channelEvents = [];
+let selectedCalDay = null;
+
+// Boutons du panneau
+const calPanel = document.getElementById("channel-calendar-panel");
+const btnToggleCal = document.getElementById("btn-toggle-calendar");
+const btnCloseCal = document.getElementById("btn-close-channel-cal");
+
+btnToggleCal?.addEventListener("click", () => {
+  if (!currentChannel) return;
+  calPanel.classList.toggle("hidden");
+  if (!calPanel.classList.contains("hidden")) {
+    document.getElementById("cal-channel-name").textContent = currentChannel.name;
+    loadChannelCalendar();
+  }
+});
+
+btnCloseCal?.addEventListener("click", () => {
+  calPanel.classList.add("hidden");
+});
+
+// Récupérer uniquement les événements de CE canal
+async function loadChannelCalendar() {
+  if (!currentChannel) return;
+  const { data, error } = await supabaseClient
+    .from("events")
+    .select("*")
+    .eq("channel_id", currentChannel.id);
+
+  if (!error && data) {
+    channelEvents = data;
+  }
+  renderMiniCalendar();
+}
+
+function renderMiniCalendar() {
+  const miniGrid = document.getElementById("mini-calendar-days");
+  if (!miniGrid) return;
+  miniGrid.innerHTML = "";
+
+  const year = currentCalDate.getFullYear();
+  const month = currentCalDate.getMonth();
+
+  document.getElementById("cal-panel-month").textContent = new Intl.DateTimeFormat("fr-FR", {
+    month: "short",
+    year: "numeric"
+  }).format(currentCalDate);
+
+  const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement("div");
+    empty.className = "mini-day-cell";
+    empty.style.visibility = "hidden";
+    miniGrid.appendChild(empty);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const cell = document.createElement("div");
+    cell.className = "mini-day-cell";
+    cell.textContent = day;
+
+    const formattedDay = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    // Indicateurs d'événements
+    const dayEvs = channelEvents.filter(e => e.start_time.startsWith(formattedDay));
+    if (dayEvs.some(e => e.category === "projet")) cell.classList.add("has-meeting");
+    if (dayEvs.some(e => e.category === "occupe")) cell.classList.add("has-busy");
+
+    if (selectedCalDay === formattedDay) cell.classList.add("selected");
+
+    cell.addEventListener("click", () => {
+      selectedCalDay = formattedDay;
+      document.getElementById("panel-selected-date").value = formattedDay;
+      document.getElementById("panel-selected-date-text").textContent = `${day}/${month + 1}`;
+      renderMiniCalendar();
+    });
+
+    miniGrid.appendChild(cell);
+  }
+}
+
+// Navigation mois
+document.getElementById("cal-panel-prev")?.addEventListener("click", () => {
+  currentCalDate.setMonth(currentCalDate.getMonth() - 1);
+  renderMiniCalendar();
+});
+
+document.getElementById("cal-panel-next")?.addEventListener("click", () => {
+  currentCalDate.setMonth(currentCalDate.getMonth() + 1);
+  renderMiniCalendar();
+});
+
+// Enregistrer l'événement lié au salon
+document.getElementById("panel-event-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const day = document.getElementById("panel-selected-date").value;
+  if (!day) {
+    alert("Veuillez sélectionner un jour sur le calendrier.");
+    return;
+  }
+
+  const newEvent = {
+    title: document.getElementById("panel-event-title").value,
+    category: document.getElementById("panel-event-category").value,
+    start_time: `${day}T${document.getElementById("panel-event-start").value}:00Z`,
+    end_time: `${day}T${document.getElementById("panel-event-end").value}:00Z`,
+    channel_id: currentChannel.id,
+    user_id: currentUser.id
+  };
+
+  const { error } = await supabaseClient.from("events").insert(newEvent);
+  if (!error) {
+    document.getElementById("panel-event-title").value = "";
+    loadChannelCalendar();
+  } else {
+    alert("Erreur : " + error.message);
+  }
+});

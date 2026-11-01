@@ -116,6 +116,17 @@
                 <h5 class="mb-0 fw-bold" id="span-channel-title">Nom du salon</h5>
                 <span class="status-online">● en direct</span>
               </div>
+              <div class="chat-header-actions">
+                <button id="btn-toggle-calendar" class="btn-cal-header" title="Calendrier du groupe">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Calendrier</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -132,6 +143,42 @@
             </button>
           </form>
         </div>
+        <!-- Panneau latéral du calendrier dédié au salon -->
+<div id="channel-calendar-panel" class="channel-cal-panel hidden">
+  <div class="panel-header">
+    <h3>Calendrier : <span id="cal-channel-name">--</span></h3>
+    <button id="btn-close-channel-cal" class="btn-close-panel">&times;</button>
+  </div>
+
+  <div class="panel-calendar-controls">
+    <button id="cal-panel-prev">&larr;</button>
+    <span id="cal-panel-month">Mois Année</span>
+    <button id="cal-panel-next">&rarr;</button>
+  </div>
+
+  <div class="mini-calendar-weekdays">
+    <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+  </div>
+  <div id="mini-calendar-days" class="mini-calendar-grid"></div>
+
+  <!-- Formulaire d'ajout rapide pour ce salon -->
+  <div class="panel-add-event">
+    <h4>Ajouter pour le <span id="panel-selected-date-text">--</span></h4>
+    <form id="panel-event-form">
+      <input type="hidden" id="panel-selected-date">
+      <input type="text" id="panel-event-title" placeholder="Ex: Rendu de groupe" required>
+      <select id="panel-event-category">
+        <option value="projet">Réunion / Projet (Vert)</option>
+        <option value="occupe">Occupé / Pas dispo (Rouge)</option>
+      </select>
+      <div class="panel-time-row">
+        <input type="time" id="panel-event-start" value="10:00" required>
+        <input type="time" id="panel-event-end" value="11:00" required>
+      </div>
+      <button type="submit" class="btn-add-event">Enregistrer l'événement</button>
+    </form>
+  </div>
+</div>
       </div>
     </div>
   </main>
