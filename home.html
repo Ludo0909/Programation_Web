@@ -125,14 +125,15 @@
         <!-- 3. Grille Dashboard (Salons récents & To-Do List) -->
         <section class="dashboard-grid">
             <!-- Colonne Salons Récents -->
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h2>Salons récents</h2>
-                    <a href="messages.html" class="dash-link">Tout voir →</a>
-                </div>
-                <div id="home-channels-list" class="quick-channels-list">
-                    <div class="empty-state">Chargement des salons...</div>
-                </div>
+            <!-- Exemple de bloc dans home.html -->
+<div class="dashboard-card">
+  <div class="card-header">
+    <h3>Choses à venir</h3>
+  </div>
+  <div id="upcoming-events-list" class="upcoming-events-list">
+    <div class="text-muted small">Chargement des événements...</div>
+  </div>
+</div>
             </div>
 
             <!-- Colonne Bloc-Notes / Tâches -->
@@ -246,6 +247,69 @@
 
             renderTodos();
         });
+        document.addEventListener("DOMContentLoaded", async () => {
+  // 1. Vérification de la session
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) {
+    window.location.replace("./index.html");
+    return;
+  }
+
+  // 2. Charger les événements
+  await loadUpcomingEvents();
+});
+
+async function loadUpcomingEvents() {
+  const container = document.getElementById("upcoming-events-list");
+  if (!container) return;
+
+  const nowIso = new Date().toISOString();
+
+  // Requête Supabase : exclut "occupe" et garde les dates >= maintenant
+  const { data: events, error } = await supabaseClient
+    .from("events")
+    .select("id, title, start_time, end_time, category, username, channels(name)")
+    .neq("category", "occupe")
+    .gte("end_time", nowIso)
+    .order("start_time", { ascending: true })
+    .limit(5); // On prend les 5 prochains
+
+  if (error) {
+    console.error("Erreur événements :", error.message);
+    container.innerHTML = '<p class="text-danger small">Impossible de charger les événements.</p>';
+    return;
+  }
+
+  if (!events || events.length === 0) {
+    container.innerHTML = '<p class="text-muted small">Aucun événement à venir.</p>';
+    return;
+  }
+
+  // 3. Rendu HTML
+  container.innerHTML = events.map(ev => {
+    const startDate = new Date(ev.start_time);
+    const dateFormatted = startDate.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+    const timeFormatted = startDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    const channelName = ev.channels?.name ? `#${ev.channels.name}` : "Général";
+    const author = ev.username || "Membre";
+
+    return `
+      <div class="upcoming-event-item">
+        <div class="event-date-badge">
+          <span class="event-badge-day">${dateFormatted}</span>
+          <span class="event-badge-hour">${timeFormatted}</span>
+        </div>
+        <div class="event-info">
+          <div class="event-title-line">
+            <span class="event-name">${ev.title}</span>
+            <span class="event-channel-tag">${channelName}</span>
+          </div>
+          <small class="event-meta">Créé par ${author}</small>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
     </script>
 </body>
 </html>
