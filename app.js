@@ -188,12 +188,10 @@ async function init() {
 }
 
 init();
-
 let currentCalDate = new Date();
 let channelEvents = [];
 let selectedCalDay = null;
 
-// Boutons du panneau
 const calPanel = document.getElementById("channel-calendar-panel");
 const btnToggleCal = document.getElementById("btn-toggle-calendar");
 const btnCloseCal = document.getElementById("btn-close-channel-cal");
@@ -211,9 +209,10 @@ btnCloseCal?.addEventListener("click", () => {
   calPanel.classList.add("hidden");
 });
 
-// Récupérer uniquement les événements de CE canal
+// Charger tous les événements du salon
 async function loadChannelCalendar() {
   if (!currentChannel) return;
+
   const { data, error } = await supabaseClient
     .from("events")
     .select("*")
@@ -223,6 +222,16 @@ async function loadChannelCalendar() {
     channelEvents = data;
   }
   renderMiniCalendar();
+  if (selectedCalDay) {
+    displayDayDetails(selectedCalDay);
+  }
+}
+
+// Vérifie si un jour donné est inclus dans une plage [start, end]
+function isDayInRange(dayStr, startTimeStr, endTimeStr) {
+  const startDay = startTimeStr.split("T")[0];
+  const endDay = endTimeStr.split("T")[0];
+  return dayStr >= startDay && dayStr <= endDay;
 }
 
 function renderMiniCalendar() {
@@ -255,25 +264,60 @@ function renderMiniCalendar() {
 
     const formattedDay = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    // Indicateurs d'événements
-    const dayEvs = channelEvents.filter(e => e.start_time.startsWith(formattedDay));
-    if (dayEvs.some(e => e.category === "projet")) cell.classList.add("has-meeting");
-    if (dayEvs.some(e => e.category === "occupe")) cell.classList.add("has-busy");
+    // Trouver les événements actifs pour ce jour (même si commencés la veille ou avant)
+    const matchingEvents = channelEvents.filter(e => isDayInRange(formattedDay, e.start_time, e.end_time));
+    if (matchingEvents.some(e => e.category === "projet")) cell.classList.add("has-meeting");
+    if (matchingEvents.some(e => e.category === "occupe")) cell.classList.add("has-busy");
 
     if (selectedCalDay === formattedDay) cell.classList.add("selected");
 
     cell.addEventListener("click", () => {
       selectedCalDay = formattedDay;
-      document.getElementById("panel-selected-date").value = formattedDay;
-      document.getElementById("panel-selected-date-text").textContent = `${day}/${month + 1}`;
       renderMiniCalendar();
+      displayDayDetails(formattedDay);
+      
+      // Préremplir par défaut les inputs de date avec le jour cliqué
+      document.getElementById("panel-event-start-date").value = formattedDay;
+      document.getElementById("panel-event-end-date").value = formattedDay;
     });
 
     miniGrid.appendChild(cell);
   }
 }
 
-// Navigation mois
+// Afficher "Qui a mis quoi" pour le jour sélectionné
+function displayDayDetails(dayStr) {
+  const container = document.getElementById("day-events-list");
+  const title = document.getElementById("details-date-title");
+  
+  const [y, m, d] = dayStr.split("-");
+  title.textContent = `${d}/${m}/${y}`;
+
+  const matchingEvents = channelEvents.filter(e => isDayInRange(dayStr, e.start_time, e.end_time));
+
+  if (matchingEvents.length === 0) {
+    container.innerHTML = '<p class="empty-events-text">Aucun événement ou indisponibilité ce jour.</p>';
+    return;
+  }
+
+  container.innerHTML = matchingEvents.map(ev => {
+    const startHour = ev.start_time.split("T")[1]?.slice(0, 5) || "";
+    const endHour = ev.end_time.split("T")[1]?.slice(0, 5) || "";
+    const authorName = ev.author_name || (ev.user_id === currentUser?.id ? "Moi" : "Membre");
+
+    return `
+      <div class="event-detail-badge badge-${ev.category}">
+        <div class="event-detail-user">
+          <span>${authorName}</span>
+          <span class="event-detail-hours">${startHour} - ${endHour}</span>
+        </div>
+        <strong>${ev.title}</strong>
+      </div>
+    `;
+  }).join("");
+}
+
+// Navigation du mois
 document.getElementById("cal-panel-prev")?.addEventListener("click", () => {
   currentCalDate.setMonth(currentCalDate.getMonth() - 1);
   renderMiniCalendar();
@@ -284,29 +328,48 @@ document.getElementById("cal-panel-next")?.addEventListener("click", () => {
   renderMiniCalendar();
 });
 
-// Enregistrer l'événement lié au salon
+// Enregistrer l'événement multi-jours
 document.getElementById("panel-event-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const day = document.getElementById("panel-selected-date").value;
-  if (!day) {
-    alert("Veuillez sélectionner un jour sur le calendrier.");
+  if (!currentChannel || !currentUser) return;
+
+  const startDate = document.getElementById("panel-event-start-date").value;
+  const startTime = document.getElementById("panel-event-start-time").value;
+  const endDate = document.getElementById("panel-event-end-date").value;
+  const endTime = document.getElementById("panel-event-end-time").value;
+
+  const startIso = `${startDate}T${startTime}:00Z`;
+  const endIso = `${endDate}T${endTime}:00Z`;
+
+  if (startIso > endIso) {
+    alert("La date de fin ne peut pas être antérieure à la date de début.");
     return;
   }
+
+  const displayName = currentUser.user_metadata?.username || currentUser.email.split("@")[0];
 
   const newEvent = {
     title: document.getElementById("panel-event-title").value,
     category: document.getElementById("panel-event-category").value,
-    start_time: `${day}T${document.getElementById("panel-event-start").value}:00Z`,
-    end_time: `${day}T${document.getElementById("panel-event-end").value}:00Z`,
+    start_time: startIso,
+    end_time: endIso,
     channel_id: currentChannel.id,
-    user_id: currentUser.id
+    user_id: currentUser.id,
+    author_name: displayName // Stocke le nom directement pour l'affichage immédiat
   };
 
   const { error } = await supabaseClient.from("events").insert(newEvent);
-  if (!error) {
-    document.getElementById("panel-event-title").value = "";
-    loadChannelCalendar();
-  } else {
-    alert("Erreur : " + error.message);
+
+  if (error) {
+    // Si la colonne author_name n'a pas encore été ajoutée dans Supabase, repli sans author_name
+    delete newEvent.author_name;
+    const retry = await supabaseClient.from("events").insert(newEvent);
+    if (retry.error) {
+      alert("Erreur : " + retry.error.message);
+      return;
+    }
   }
+
+  document.getElementById("panel-event-title").value = "";
+  await loadChannelCalendar();
 });
