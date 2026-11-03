@@ -143,7 +143,7 @@
             </button>
           </form>
         </div>
-        <!-- Panneau latéral du calendrier dédié au salon -->
+       <!-- Panneau latéral du calendrier du salon -->
 <div id="channel-calendar-panel" class="channel-cal-panel hidden">
   <div class="panel-header">
     <h3>Calendrier : <span id="cal-channel-name">--</span></h3>
@@ -161,21 +161,44 @@
   </div>
   <div id="mini-calendar-days" class="mini-calendar-grid"></div>
 
-  <!-- Formulaire d'ajout rapide pour ce salon -->
+  <!-- Détails du jour sélectionné (Qui a mis quoi) -->
+  <div class="panel-day-details">
+    <div class="details-header">
+      <h4>Créneaux du <span id="details-date-title">--</span></h4>
+    </div>
+    <div id="day-events-list" class="day-events-list">
+      <p class="empty-events-text">Cliquez sur un jour pour voir les disponibilités.</p>
+    </div>
+  </div>
+
+  <!-- Formulaire d'ajout (avec support multi-jours) -->
   <div class="panel-add-event">
-    <h4>Ajouter pour le <span id="panel-selected-date-text">--</span></h4>
+    <h4>Ajouter un créneau</h4>
     <form id="panel-event-form">
-      <input type="hidden" id="panel-selected-date">
-      <input type="text" id="panel-event-title" placeholder="Ex: Rendu de groupe" required>
+      <input type="text" id="panel-event-title" placeholder="Ex: Révision partiels / Absent" required>
+      
       <select id="panel-event-category">
         <option value="projet">Réunion / Projet (Vert)</option>
         <option value="occupe">Occupé / Pas dispo (Rouge)</option>
       </select>
-      <div class="panel-time-row">
-        <input type="time" id="panel-event-start" value="10:00" required>
-        <input type="time" id="panel-event-end" value="11:00" required>
+
+      <div class="panel-field-group">
+        <label>Début :</label>
+        <div class="panel-datetime-row">
+          <input type="date" id="panel-event-start-date" required>
+          <input type="time" id="panel-event-start-time" value="09:00" required>
+        </div>
       </div>
-      <button type="submit" class="btn-add-event">Enregistrer l'événement</button>
+
+      <div class="panel-field-group">
+        <label>Fin :</label>
+        <div class="panel-datetime-row">
+          <input type="date" id="panel-event-end-date" required>
+          <input type="time" id="panel-event-end-time" value="18:00" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-add-event">Enregistrer le créneau</button>
     </form>
   </div>
 </div>
