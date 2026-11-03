@@ -188,6 +188,10 @@ async function init() {
 }
 
 init();
+
+// ========================================================
+// GESTION DU CALENDRIER DE SALON (MULTI-JOURS & USERNAME)
+// ========================================================
 let currentCalDate = new Date();
 let channelEvents = [];
 let selectedCalDay = null;
@@ -209,7 +213,7 @@ btnCloseCal?.addEventListener("click", () => {
   calPanel.classList.add("hidden");
 });
 
-// Charger tous les événements du salon
+// Charger tous les événements du salon sélectionné
 async function loadChannelCalendar() {
   if (!currentChannel) return;
 
@@ -264,7 +268,7 @@ function renderMiniCalendar() {
 
     const formattedDay = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    // Trouver les événements actifs pour ce jour (même si commencés la veille ou avant)
+    // Événements actifs pour ce jour
     const matchingEvents = channelEvents.filter(e => isDayInRange(formattedDay, e.start_time, e.end_time));
     if (matchingEvents.some(e => e.category === "projet")) cell.classList.add("has-meeting");
     if (matchingEvents.some(e => e.category === "occupe")) cell.classList.add("has-busy");
@@ -276,20 +280,24 @@ function renderMiniCalendar() {
       renderMiniCalendar();
       displayDayDetails(formattedDay);
       
-      // Préremplir par défaut les inputs de date avec le jour cliqué
-      document.getElementById("panel-event-start-date").value = formattedDay;
-      document.getElementById("panel-event-end-date").value = formattedDay;
+      // Préremplir les champs de date avec le jour cliqué
+      const inputStart = document.getElementById("panel-event-start-date");
+      const inputEnd = document.getElementById("panel-event-end-date");
+      if (inputStart) inputStart.value = formattedDay;
+      if (inputEnd) inputEnd.value = formattedDay;
     });
 
     miniGrid.appendChild(cell);
   }
 }
 
-// Afficher "Qui a mis quoi" pour le jour sélectionné
+// Afficher qui a mis quoi pour le jour sélectionné
 function displayDayDetails(dayStr) {
   const container = document.getElementById("day-events-list");
   const title = document.getElementById("details-date-title");
   
+  if (!container || !title) return;
+
   const [y, m, d] = dayStr.split("-");
   title.textContent = `${d}/${m}/${y}`;
 
@@ -303,12 +311,16 @@ function displayDayDetails(dayStr) {
   container.innerHTML = matchingEvents.map(ev => {
     const startHour = ev.start_time.split("T")[1]?.slice(0, 5) || "";
     const endHour = ev.end_time.split("T")[1]?.slice(0, 5) || "";
-    const authorName = ev.author_name || (ev.user_id === currentUser?.id ? "Moi" : "Membre");
+    
+    const isMe = ev.user_id === currentUser?.id;
+    const authorName = ev.username 
+      ? (isMe ? `${ev.username} (Moi)` : ev.username) 
+      : (isMe ? "Moi" : "Étudiant");
 
     return `
       <div class="event-detail-badge badge-${ev.category}">
         <div class="event-detail-user">
-          <span>${authorName}</span>
+          <span>👤 ${authorName}</span>
           <span class="event-detail-hours">${startHour} - ${endHour}</span>
         </div>
         <strong>${ev.title}</strong>
@@ -328,7 +340,7 @@ document.getElementById("cal-panel-next")?.addEventListener("click", () => {
   renderMiniCalendar();
 });
 
-// Enregistrer l'événement multi-jours
+// Enregistrer l'événement multi-jours avec le username
 document.getElementById("panel-event-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentChannel || !currentUser) return;
@@ -346,7 +358,7 @@ document.getElementById("panel-event-form")?.addEventListener("submit", async (e
     return;
   }
 
-  const displayName = currentUser.user_metadata?.username || currentUser.email.split("@")[0];
+  const displayName = currentUser.user_metadata?.username || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
 
   const newEvent = {
     title: document.getElementById("panel-event-title").value,
@@ -355,19 +367,14 @@ document.getElementById("panel-event-form")?.addEventListener("submit", async (e
     end_time: endIso,
     channel_id: currentChannel.id,
     user_id: currentUser.id,
-    author_name: displayName // Stocke le nom directement pour l'affichage immédiat
+    username: displayName
   };
 
   const { error } = await supabaseClient.from("events").insert(newEvent);
 
   if (error) {
-    // Si la colonne author_name n'a pas encore été ajoutée dans Supabase, repli sans author_name
-    delete newEvent.author_name;
-    const retry = await supabaseClient.from("events").insert(newEvent);
-    if (retry.error) {
-      alert("Erreur : " + retry.error.message);
-      return;
-    }
+    alert("Erreur lors de l'enregistrement : " + error.message);
+    return;
   }
 
   document.getElementById("panel-event-title").value = "";
