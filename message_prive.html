@@ -12,10 +12,8 @@
   <script src="dm.js" defer></script>
 </head>
 <body>
-
-  <!-- Menu latéral (identique à messages.html) -->
   <aside class="sidebar-orange">
-    <a href="home.html" class="sidebar-brand">
+    <a href="profil.html" class="sidebar-brand">
       <div class="brand-avatar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
@@ -69,8 +67,6 @@
       </a>
     </div>
   </aside>
-
-  <!-- Zone de contenu principale (alignée sur messages.html) -->
   <main class="content">
     <header class="welcome-header">
       <h1>Vos Conversations Privées</h1>
@@ -78,7 +74,6 @@
     </header>
 
     <div class="chat-hub-layout">
-      <!-- Colonne de gauche (Liste des membres) -->
       <div class="chat-cards-list">
         <div class="chat-list-header">
           <h6 class="mb-2 fw-bold">Contacts</h6>
@@ -86,10 +81,7 @@
         </div>
         <div id="ul-users" class="chat-list-scroll"></div>
       </div>
-
-      <!-- Colonne de droite (Fenêtre de discussion) -->
       <div class="chat-window-card">
-        <!-- Placeholder par défaut -->
         <div id="chat-placeholder">
           <div class="placeholder-icon-wrap">
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -99,8 +91,6 @@
           <h5 class="fw-bold text-dark mb-1">Aucune conversation sélectionnée</h5>
           <p class="small text-muted">Choisissez un membre à gauche pour démarrer un échange privé.</p>
         </div>
-
-        <!-- Conversation active -->
         <div id="chat-container" class="chat-main">
           <div class="chat-header">
             <div class="d-flex align-items-center gap-3">
@@ -111,9 +101,7 @@
               </div>
             </div>
           </div>
-
           <div id="div-messages" class="messages-area"></div>
-
           <form id="form-direct-message" class="chat-input-bar">
             <input type="text" id="input-message" placeholder="Écrivez votre message..." autocomplete="off" required />
             <button type="submit">
@@ -128,7 +116,6 @@
       </div>
     </div>
   </main>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
