@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres</title>
+  <script src="theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-service.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Centrage parfait sur tout l'écran */
+    body {
+      min-height: 100vh;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Boîte principale */
+    .settings-box {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Barre du haut */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      color: #1e293b;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .top-bar h1 {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    /* Carte de profil */
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 24px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #ea580c;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      overflow: hidden;
+    }
+
+    .profile-info small {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .profile-info strong {
+      font-size: 16px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-info span {
+      font-size: 12px;
+      color: #94a3b8;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Titres de sections */
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    /* Groupe de menus */
+    .menu-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .menu-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: #1e293b;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      background: transparent;
+      text-align: left;
+    }
+
+    .menu-row:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .menu-row-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(234, 88, 12, 0.15);
+      color: #ea580c;
+    }
+
+    .icon-badge.gray {
+      background: #e2e8f0;
+      color: #64748b;
+    }
+
+    /* Switch iOS simple */
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background-color: #cbd5e1;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    input:checked + .slider {
+      background-color: #ea580c;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Bouton supprimer */
+    .btn-danger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 13px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-danger:hover {
+      background: #fca5a5;
+    }
+
+    /* Mode sombre */
+    html.dark-theme body {
+      background-color: #0b0f17;
+      color: #f8fafc;
+    }
+
+    html.dark-theme .settings-box {
+      background-color: #111827;
+      border-color: #374151;
+    }
+
+    html.dark-theme .back-btn,
+    html.dark-theme .profile-card,
+    html.dark-theme .menu-group {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+
+    html.dark-theme .menu-row,
+    html.dark-theme .top-bar h1,
+    html.dark-theme .profile-info strong {
+      color: #f8fafc;
+    }
+
+    html.dark-theme .menu-row:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    html.dark-theme .icon-badge.gray {
+      background: #374151;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="settings-box">
+    <!-- Retour + Titre -->
+    <div class="top-bar">
+      <a href="home.html" class="back-btn" title="Retour">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <h1>Paramètres</h1>
+    </div>
+
+    <!-- Carte Profil Dynamique -->
+    <div class="profile-card">
+      <div class="avatar" id="user-avatar">--</div>
+      <div class="profile-info">
+        <small>Connecté(e) en tant que</small>
+        <strong id="user-display-name">Chargement...</strong>
+        <span id="user-email"></span>
+      </div>
+    </div>
+
+    <!-- Section Affichage -->
+    <div class="section-title">Affichage</div>
+    <div class="menu-group">
+      <div class="menu-row">
+        <div class="menu-row-left">
+          <div class="icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <span>Mode sombre</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Section Compte -->
+    <div class="section-title">Compte</div>
+    <div class="menu-group">
+      <button type="button" class="menu-row" id="btn-logout">
+        <div class="menu-row-left">
+          <div class="icon-badge gray">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </div>
+          <span>Se déconnecter</span>
+        </div>
+        <span style="color: #94a3b8; font-size: 18px;">&rsaquo;</span>
+      </button>
+    </div>
+
+    <!-- Bouton Supprimer le compte -->
+    <button type="button" class="btn-danger" id="btn-delete-account">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+      </svg>
+      Supprimer le compte
+    </button>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const themeToggle = document.getElementById('theme-toggle');
+
+      // 1. Gestion de l'état initial du switch Thème sombre
+      if (localStorage.getItem('site-theme') === 'dark') {
+        themeToggle.checked = true;
+      }
+
+      themeToggle.addEventListener('change', () => {
+        const isDark = themeToggle.checked;
+        document.documentElement.classList.toggle('dark-theme', isDark);
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      });
+
+      // 2. Chargement des données de l'utilisateur connecté
+      const { user } = await AuthService.getUser();
+      if (!user) {
+        window.location.replace("./index.html");
+        return;
+      }
+
+      const displayName = user.user_metadata?.username || user.user_metadata?.full_name || user.email.split('@')[0];
+      const email = user.email || "";
+
+      document.getElementById("user-display-name").textContent = displayName;
+      document.getElementById("user-email").textContent = email;
+
+      // Calcul des initiales (ex: "Wouna Tremblay" -> "WT", "ludo" -> "LU")
+      const words = displayName.trim().split(/\s+/);
+      let initials = "";
+      if (words.length >= 2) {
+        initials = (words[0][0] + words[1][0]).toUpperCase();
+      } else {
+        initials = displayName.slice(0, 2).toUpperCase();
+      }
+      document.getElementById("user-avatar").textContent = initials;
+
+      // 3. Déconnexion propre
+      document.getElementById("btn-logout")?.addEventListener("click", async () => {
+        await AuthService.signOut();
+        StorageService.clearSession();
+        window.location.replace("./index.html");
+      });
+
+      // 4. Suppression de compte (avertissement)
+      document.getElementById("btn-delete-account")?.addEventListener("click", async () => {
+        const confirmDelete = confirm("Êtes-vous certain de vouloir supprimer définitivement votre compte ? Cette action est irréversible.");
+        if (confirmDelete) {
+          // Si tu as un endpoint de suppression, tu peux l'appeler ici. Sinon déconnexion directe :
+          await AuthService.signOut();
+          StorageService.clearSession();
+          window.location.replace("./index.html");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
