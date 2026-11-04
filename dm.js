@@ -100,7 +100,7 @@ async function selectRecipient(cardElement, user) {
   activeRecipient = user;
 
   if (chatPlaceholder) chatPlaceholder.style.display = "none";
-  if (chatContainer) chatContainer.style.display = "flex";
+  if (chatContainer) chatContainer.classList.add("active"); // Active la classe définie dans style.css
 
   spanUserTitle.textContent = user.username || "Membre";
   headerAvatar.textContent = (user.username || "U").charAt(0).toUpperCase();

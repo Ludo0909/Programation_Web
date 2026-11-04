@@ -70,15 +70,15 @@
     </div>
   </aside>
 
-  <!-- Zone de contenu principale -->
+  <!-- Zone de contenu principale (alignée sur messages.html) -->
   <main class="content">
     <header class="welcome-header">
-      <h1>Messages Privés</h1>
-      <p>Échangez en tête-à-tête et en toute confidentialité avec un camarade.</p>
+      <h1>Vos Conversations Privées</h1>
+      <p>Échangez en tête-à-tête et en direct avec vos camarades.</p>
     </header>
 
     <div class="chat-hub-layout">
-      <!-- Colonne de gauche : contacts -->
+      <!-- Colonne de gauche (Liste des membres) -->
       <div class="chat-cards-list">
         <div class="chat-list-header">
           <h6 class="mb-2 fw-bold">Contacts</h6>
@@ -87,7 +87,7 @@
         <div id="ul-users" class="chat-list-scroll"></div>
       </div>
 
-      <!-- Colonne de droite : conversation active -->
+      <!-- Colonne de droite (Fenêtre de discussion) -->
       <div class="chat-window-card">
         <!-- Placeholder par défaut -->
         <div id="chat-placeholder">
@@ -97,7 +97,7 @@
             </svg>
           </div>
           <h5 class="fw-bold text-dark mb-1">Aucune conversation sélectionnée</h5>
-          <p class="small text-muted">Sélectionnez un membre à gauche pour discuter en privé.</p>
+          <p class="small text-muted">Choisissez un membre à gauche pour démarrer un échange privé.</p>
         </div>
 
         <!-- Conversation active -->
@@ -106,7 +106,7 @@
             <div class="d-flex align-items-center gap-3">
               <div class="avatar" id="header-avatar">@</div>
               <div>
-                <h5 class="mb-0 fw-bold" id="span-user-title">Nom du contact</h5>
+                <h5 class="mb-0 fw-bold" id="span-user-title">Nom du membre</h5>
                 <span class="status-online">● en ligne</span>
               </div>
             </div>
@@ -115,7 +115,7 @@
           <div id="div-messages" class="messages-area"></div>
 
           <form id="form-direct-message" class="chat-input-bar">
-            <input type="text" id="input-message" placeholder="Écrivez votre message privé..." autocomplete="off" required />
+            <input type="text" id="input-message" placeholder="Écrivez votre message..." autocomplete="off" required />
             <button type="submit">
               <span>Envoyer</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
