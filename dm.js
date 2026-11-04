@@ -1,111 +1,162 @@
 let currentUser = null;
 let activeRecipient = null;
 let realtimeChannel = null;
+let allUsers = [];
 
-const usersListContainer = document.getElementById("users-list");
-const dmContainer = document.getElementById("dm-container");
-const dmPlaceholder = document.getElementById("dm-placeholder");
-const dmMessages = document.getElementById("dm-messages");
-const dmForm = document.getElementById("dm-form");
-const dmInput = document.getElementById("dm-input");
-const dmRecipientName = document.getElementById("dm-recipient-name");
-const dmAvatar = document.getElementById("dm-avatar");
+const searchUsersInput = document.getElementById("search-users");
+const ulUsers = document.getElementById("ul-users");
+const chatPlaceholder = document.getElementById("chat-placeholder");
+const chatContainer = document.getElementById("chat-container");
+const spanUserTitle = document.getElementById("span-user-title");
+const headerAvatar = document.getElementById("header-avatar");
+const divMessages = document.getElementById("div-messages");
+const formDirectMessage = document.getElementById("form-direct-message");
+const inputMessage = document.getElementById("input-message");
+
+AuthService.onSessionChange((event, session) => {
+  if (event === "SIGNED_OUT" || !session) {
+    StorageService.clearSession();
+    window.location.replace("./index.html");
+  }
+});
 
 async function init() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { user } = await AuthService.getUser();
   if (!user) {
     window.location.replace("./index.html");
     return;
   }
   currentUser = user;
-
-  await loadContacts();
-  setupRealtime();
+  await loadUsers();
 }
 
-// 1. Récupérer les membres avec qui discuter
-async function loadContacts() {
-  // Option A : récupérer depuis une table 'profiles' si elle existe
-  // Option B : récupérer les pseudos distincts ayant déjà écrit sur la plateforme
-  const { data: messages } = await supabaseClient
-    .from("messages")
-    .select("created_by, username");
+// Charger les profils disponibles
+async function loadUsers() {
+  // Option A : via la table profiles si disponible
+  let { data: users, error } = await supabaseClient
+    .from("profiles")
+    .select("id, username")
+    .neq("id", currentUser.id);
 
-  const contactsMap = new Map();
-  if (messages) {
-    messages.forEach(m => {
-      if (m.created_by && m.created_by !== currentUser.id) {
-        contactsMap.set(m.created_by, m.username || "Membre");
+  // Option B : si pas de table profiles, repli sur les personnes ayant déjà posté des messages
+  if (error || !users || users.length === 0) {
+    const { data: fallbackMessages } = await supabaseClient
+      .from("messages")
+      .select("created_by, username");
+
+    const uniqueMap = new Map();
+    fallbackMessages?.forEach(m => {
+      if (m.created_by && m.created_by !== currentUser.id && !uniqueMap.has(m.created_by)) {
+        uniqueMap.set(m.created_by, { id: m.created_by, username: m.username || "Membre" });
       }
     });
+    users = Array.from(uniqueMap.values());
   }
 
-  renderContacts(Array.from(contactsMap.entries()));
+  allUsers = users || [];
+  renderUserList(allUsers);
 }
 
-function renderContacts(contacts) {
-  usersListContainer.replaceChildren();
+function renderUserList(users) {
+  ulUsers.replaceChildren();
 
-  if (contacts.length === 0) {
-    usersListContainer.innerHTML = '<div class="text-center text-muted small py-4">Aucun membre trouvé.</div>';
+  if (users.length === 0) {
+    ulUsers.innerHTML = '<div class="text-center text-muted small py-4">Aucun membre trouvé.</div>';
     return;
   }
 
-  contacts.forEach(([userId, username]) => {
+  users.forEach((user) => {
     const card = document.createElement("div");
     card.className = "chat-card";
+    card.setAttribute("data-id", user.id);
+
+    if (activeRecipient && activeRecipient.id === user.id) {
+      card.classList.add("active");
+    }
+
+    const firstLetter = (user.username || "U").charAt(0).toUpperCase();
     card.innerHTML = `
-      <div class="avatar">${username.charAt(0).toUpperCase()}</div>
+      <div class="avatar">${firstLetter}</div>
       <div class="overflow-hidden">
-        <h6 class="mb-0 text-truncate fw-bold">${username}</h6>
+        <h6 class="mb-0 text-truncate fw-bold">${user.username || "Utilisateur"}</h6>
         <small class="text-muted">Message direct</small>
       </div>
     `;
 
-    card.onclick = () => selectRecipient(userId, username, card);
-    usersListContainer.appendChild(card);
+    card.onclick = () => selectRecipient(card, user);
+    ulUsers.appendChild(card);
   });
 }
 
-// 2. Sélectionner un destinataire
-async function selectRecipient(userId, username, cardElement) {
-  document.querySelectorAll(".chat-card").forEach(c => c.classList.remove("active"));
-  cardElement?.classList.add("active");
+searchUsersInput?.addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  const filtered = allUsers.filter(u => (u.username || "").toLowerCase().includes(query));
+  renderUserList(filtered);
+});
 
-  activeRecipient = { id: userId, username };
-  dmRecipientName.textContent = username;
-  dmAvatar.textContent = username.charAt(0).toUpperCase();
+async function selectRecipient(cardElement, user) {
+  document.querySelectorAll(".chat-card").forEach((c) => c.classList.remove("active"));
+  cardElement.classList.add("active");
 
-  dmPlaceholder.style.display = "none";
-  dmContainer.style.display = "flex";
+  activeRecipient = user;
 
-  await loadConversation();
+  if (chatPlaceholder) chatPlaceholder.style.display = "none";
+  if (chatContainer) chatContainer.style.display = "flex";
+
+  spanUserTitle.textContent = user.username || "Utilisateur";
+  headerAvatar.textContent = (user.username || "U").charAt(0).toUpperCase();
+
+  subscribeToDirectMessages();
+  await loadDirectMessages();
 }
 
-// 3. Charger l'historique privé entre les deux personnes
-async function loadConversation() {
-  if (!activeRecipient) return;
+async function loadDirectMessages() {
+  if (!activeRecipient || !currentUser) return;
 
-  const { data: msgs, error } = await supabaseClient
+  const { data: messages, error } = await supabaseClient
     .from("direct_messages")
     .select("*")
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeRecipient.id}),and(sender_id.eq.${activeRecipient.id},receiver_id.eq.${currentUser.id})`
-    )
+    .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeRecipient.id}),and(sender_id.eq.${activeRecipient.id},receiver_id.eq.${currentUser.id})`)
     .order("created_at", { ascending: true });
 
   if (error) {
-    console.error("Erreur chargement MP :", error.message);
+    console.error("Erreur chargement messages :", error.message);
     return;
   }
 
-  dmMessages.replaceChildren();
-  msgs.forEach(msg => displayDmMessage(msg));
-  dmMessages.scrollTop = dmMessages.scrollHeight;
+  divMessages.replaceChildren();
+  (messages || []).forEach(msg => displayDirectMessage(msg));
+  divMessages.scrollTop = divMessages.scrollHeight;
 }
 
-function displayDmMessage(msg) {
+function subscribeToDirectMessages() {
+  if (realtimeChannel) {
+    supabaseClient.removeChannel(realtimeChannel);
+  }
+
+  realtimeChannel = supabaseClient
+    .channel("direct_messages_sync")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "direct_messages" },
+      (payload) => {
+        const msg = payload.new;
+        const isFromCurrentChat =
+          (msg.sender_id === currentUser.id && msg.receiver_id === activeRecipient.id) ||
+          (msg.sender_id === activeRecipient.id && msg.receiver_id === currentUser.id);
+
+        if (isFromCurrentChat) {
+          displayDirectMessage(msg);
+          divMessages.scrollTop = divMessages.scrollHeight;
+        }
+      }
+    )
+    .subscribe();
+}
+
+function displayDirectMessage(msg) {
   const isMine = msg.sender_id === currentUser.id;
+
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${isMine ? "outgoing" : "incoming"}`;
 
@@ -114,58 +165,38 @@ function displayDmMessage(msg) {
 
   const timeSpan = document.createElement("span");
   timeSpan.className = "time";
-  const d = new Date(msg.created_at);
-  timeSpan.textContent = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+
+  const d = msg.created_at ? new Date(msg.created_at) : new Date();
+  const timeFormatted = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+  timeSpan.textContent = isMine ? timeFormatted : `${timeFormatted} · ${msg.sender_username || activeRecipient.username || 'Contact'}`;
 
   msgDiv.append(textP, timeSpan);
-  dmMessages.appendChild(msgDiv);
+  divMessages.appendChild(msgDiv);
 }
 
-// 4. Envoi de message privé
-dmForm.addEventListener("submit", async (e) => {
+formDirectMessage?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const text = dmInput.value.trim();
-  if (!text || !activeRecipient) return;
+  const content = inputMessage.value.trim();
+  if (!content || !activeRecipient || !currentUser) return;
 
-  dmInput.value = "";
-  const myPseudo = currentUser.user_metadata?.username || currentUser.email.split("@")[0];
+  const myUsername = currentUser.user_metadata?.username || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
 
-  const { data, error } = await supabaseClient
+  inputMessage.value = "";
+
+  const newDirectMsg = {
+    sender_id: currentUser.id,
+    receiver_id: activeRecipient.id,
+    sender_username: myUsername,
+    content: content
+  };
+
+  const { error } = await supabaseClient
     .from("direct_messages")
-    .insert({
-      sender_id: currentUser.id,
-      receiver_id: activeRecipient.id,
-      sender_username: myPseudo,
-      content: text
-    })
-    .select()
-    .single();
+    .insert(newDirectMsg);
 
   if (error) {
-    alert("Erreur d'envoi : " + error.message);
-  } else if (data) {
-    displayDmMessage(data);
-    dmMessages.scrollTop = dmMessages.scrollHeight;
+    console.error("Erreur envoi MP :", error.message);
   }
 });
-
-// 5. Écoute en temps réel
-function setupRealtime() {
-  realtimeChannel = supabaseClient
-    .channel("dm-listener")
-    .on(
-      "postgres_changes",
-      { event: "INSERT", schema: "public", table: "direct_messages" },
-      payload => {
-        const newMsg = payload.new;
-        // Afficher seulement si la discussion ouverte correspond à l'expéditeur
-        if (activeRecipient && newMsg.sender_id === activeRecipient.id && newMsg.receiver_id === currentUser.id) {
-          displayDmMessage(newMsg);
-          dmMessages.scrollTop = dmMessages.scrollHeight;
-        }
-      }
-    )
-    .subscribe();
-}
 
 init();
