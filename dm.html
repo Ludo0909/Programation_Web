@@ -10,110 +10,115 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-service.js"></script>
 </head>
-<body class="chat-page">
-  <!-- Barre latérale principale -->
-  <aside class="sidebar-orange">
-    <a href="home.html" class="sidebar-brand">
-      <div class="brand-avatar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </div>
-    </a>
-    <nav class="sidebar-nav">
-      <ul>
-        <li>
-          <a href="home.html" class="nav-item" title="Accueil">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="messages.html" class="nav-item" title="Salons de groupe">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="dm.html" class="nav-item active" title="Messages Privés">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="calendrier.html" class="nav-item" title="Calendrier">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    <div class="sidebar-bottom">
-      <a href="parametre.html" class="nav-item" title="Paramètres">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
+<body>
+  <div class="app-container">
+    <!-- Barre latérale standard WorkFlow -->
+    <aside class="sidebar-orange">
+      <a href="home.html" class="sidebar-brand">
+        <div class="brand-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
       </a>
-    </div>
-  </aside>
-
-  <!-- Structure à 2 colonnes comme messages.html -->
-  <main class="chat-main-container">
-    <div class="chat-sidebar-card">
-      <div class="sidebar-search-box">
-        <h5 class="fw-bold mb-3">Messages directs</h5>
-        <input type="text" id="search-users" placeholder="Rechercher un membre..." class="form-control">
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="home.html" class="nav-item" title="Accueil">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="messages.html" class="nav-item" title="Messagerie">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="dm.html" class="nav-item active" title="Messages Privés">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="groupes.html" class="nav-item" title="Groupes">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="parametre.html" class="nav-item" title="Paramètres">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </a>
       </div>
-      <div id="ul-users" class="chat-list-container"></div>
-    </div>
+    </aside>
 
-    <div class="chat-window-card">
-      <div id="chat-placeholder" class="chat-placeholder">
-        <div class="placeholder-content">
-          <div class="placeholder-icon">💬</div>
-          <h5>Vos messages privés</h5>
-          <p class="text-muted">Sélectionnez un membre dans la liste pour démarrer une conversation privée.</p>
+    <!-- Zone principale : réplique exacte de messages.html -->
+    <main class="content p-0 d-flex flex-grow-1 overflow-hidden">
+      <!-- Colonne des contacts -->
+      <section class="chat-sidebar">
+        <div class="sidebar-header">
+          <h5 class="fw-bold mb-0">Messages Privés</h5>
         </div>
-      </div>
 
-      <div id="chat-container" class="chat-active-box" style="display: none; height: 100%; flex-direction: column;">
-        <div class="chat-header">
-          <div class="chat-header-info">
-            <div id="header-avatar" class="avatar avatar-header">U</div>
+        <div class="p-3">
+          <input type="text" id="search-users" class="form-control" placeholder="Rechercher un membre...">
+        </div>
+
+        <div id="ul-users" class="chat-list flex-grow-1 overflow-y-auto">
+          <!-- Injecté par dm.js -->
+        </div>
+      </section>
+
+      <!-- Fenêtre de chat -->
+      <section class="chat-window">
+        <!-- Placeholder par défaut -->
+        <div id="chat-placeholder" class="chat-placeholder">
+          <p class="text-muted">Sélectionnez un membre pour démarrer une conversation privée.</p>
+        </div>
+
+        <!-- Zone de discussion active -->
+        <div id="chat-container" class="chat-container" style="display: none;">
+          <header class="chat-header">
+            <div class="avatar" id="header-avatar">U</div>
             <div>
-              <h5 id="span-user-title" class="mb-0 fw-bold">--</h5>
-              <small id="user-status-text" class="text-success">Conversation sécurisée</small>
+              <h5 class="mb-0 fw-bold" id="span-user-title">--</h5>
+              <small class="text-success">Privé</small>
             </div>
+          </header>
+
+          <div id="div-messages" class="chat-messages">
+            <!-- Messages injectés en JS -->
           </div>
+
+          <footer class="chat-footer">
+            <form id="form-direct-message" class="d-flex w-100 gap-2">
+              <input type="text" id="input-message" class="form-control" placeholder="Écrire un message privé..." required autocomplete="off">
+              <button type="submit" class="btn btn-primary px-4">Envoyer</button>
+            </form>
+          </footer>
         </div>
-
-        <div id="div-messages" class="chat-messages-scroll"></div>
-
-        <form id="form-direct-message" class="chat-input-bar">
-          <input type="text" id="input-message" placeholder="Écrire un message privé..." required autocomplete="off">
-          <button type="submit" class="btn-send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script src="dm.js"></script>
 </body>

@@ -13,6 +13,7 @@ const divMessages = document.getElementById("div-messages");
 const formDirectMessage = document.getElementById("form-direct-message");
 const inputMessage = document.getElementById("input-message");
 
+// Redirection si déconnexion
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
     StorageService.clearSession();
@@ -30,22 +31,20 @@ async function init() {
   await loadUsers();
 }
 
-// Charger les profils disponibles
+// Récupère les contacts (d'abord profiles, repli sur messages si absente)
 async function loadUsers() {
-  // Option A : via la table profiles si disponible
   let { data: users, error } = await supabaseClient
     .from("profiles")
     .select("id, username")
     .neq("id", currentUser.id);
 
-  // Option B : si pas de table profiles, repli sur les personnes ayant déjà posté des messages
   if (error || !users || users.length === 0) {
-    const { data: fallbackMessages } = await supabaseClient
+    const { data: pastMessages } = await supabaseClient
       .from("messages")
       .select("created_by, username");
 
     const uniqueMap = new Map();
-    fallbackMessages?.forEach(m => {
+    pastMessages?.forEach(m => {
       if (m.created_by && m.created_by !== currentUser.id && !uniqueMap.has(m.created_by)) {
         uniqueMap.set(m.created_by, { id: m.created_by, username: m.username || "Membre" });
       }
@@ -78,8 +77,8 @@ function renderUserList(users) {
     card.innerHTML = `
       <div class="avatar">${firstLetter}</div>
       <div class="overflow-hidden">
-        <h6 class="mb-0 text-truncate fw-bold">${user.username || "Utilisateur"}</h6>
-        <small class="text-muted">Message direct</small>
+        <h6 class="mb-0 text-truncate fw-bold">${user.username || "Membre"}</h6>
+        <small class="text-muted">Message privé</small>
       </div>
     `;
 
@@ -103,7 +102,7 @@ async function selectRecipient(cardElement, user) {
   if (chatPlaceholder) chatPlaceholder.style.display = "none";
   if (chatContainer) chatContainer.style.display = "flex";
 
-  spanUserTitle.textContent = user.username || "Utilisateur";
+  spanUserTitle.textContent = user.username || "Membre";
   headerAvatar.textContent = (user.username || "U").charAt(0).toUpperCase();
 
   subscribeToDirectMessages();
@@ -120,7 +119,7 @@ async function loadDirectMessages() {
     .order("created_at", { ascending: true });
 
   if (error) {
-    console.error("Erreur chargement messages :", error.message);
+    console.error("Erreur direct_messages :", error.message);
     return;
   }
 
