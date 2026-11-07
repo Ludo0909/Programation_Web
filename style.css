@@ -2,10 +2,11 @@ body {
   background-color: #f8fafc;
   color: #1e293b;
   margin-left: 88px;
+  min-height: 100vh;
 }
 
 html.dark-theme body {
-  background-color: #0b0f17;
+  background-color: #0b0f17; 
   color: #f8fafc;
 }
 
@@ -22,7 +23,7 @@ html.dark-theme .card-info p {
 
 html.dark-theme .categories-section {
   background-color: #111827;
-  border-color: #ea580c;
+  border-color: #ea580c;      
 }
 
 html.dark-theme .card {
@@ -39,7 +40,7 @@ html.dark-theme .card:hover {
 .card svg {
   width: 38px;
   height: 38px;
-  stroke: #ff7a18;
+  stroke: #ff7a18; 
   margin-bottom: 12px;
   transition: transform 0.2s ease;
 }
@@ -153,8 +154,8 @@ html.dark-theme #carouselExampleCaptions {
 
 .nav-badge {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 4px;
+  right: 4px;
   background-color: #ef4444;
   color: #ffffff;
   font-size: 10px;
@@ -167,11 +168,7 @@ html.dark-theme #carouselExampleCaptions {
   justify-content: center;
   padding: 0 4px;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.nav-badge.hidden {
-  display: none !important;
+  line-height: 1;
 }
 
 .sidebar-bottom {
@@ -255,18 +252,6 @@ html.dark-theme #carouselExampleCaptions {
   transform: translateY(-4px);
   border-color: #cbd5e1;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
-}
-
-.card svg {
-  width: 38px;
-  height: 38px;
-  stroke: #ff7a0d;
-  margin-bottom: 12px;
-  transition: transform 0.2s ease;
-}
-
-.card:hover svg {
-  transform: scale(1.1);
 }
 
 .card-info h3 {
@@ -372,6 +357,7 @@ html.dark-theme #carouselExampleCaptions {
   height: 100%;
   background: #ffffff;
   position: relative;
+  overflow: hidden;
 }
 
 #chat-placeholder {
@@ -640,7 +626,7 @@ html.dark-theme .chat-input-bar input:focus {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -691,7 +677,7 @@ html.dark-theme .chat-input-bar input:focus {
   gap: 24px;
 }
 
-.dash-card {
+.dash-card, .dashboard-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 18px;
@@ -699,14 +685,17 @@ html.dark-theme .chat-input-bar input:focus {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
-.dash-card-header {
+.dash-card-header, .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 18px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
-.dash-card-header h2 {
+.dash-card-header h2, .card-header h3 {
   font-size: 17px;
   font-weight: 700;
   color: #1e293b;
@@ -827,13 +816,15 @@ html.dark-theme .btn-hero-secondary {
 }
 
 html.dark-theme .stat-card,
-html.dark-theme .dash-card {
+html.dark-theme .dash-card,
+html.dark-theme .dashboard-card {
   background: #111827;
   border-color: #1f2937;
 }
 
 html.dark-theme .stat-info h3,
-html.dark-theme .dash-card-header h2 {
+html.dark-theme .dash-card-header h2,
+html.dark-theme .card-header h3 {
   color: #ffffff;
 }
 
@@ -1038,13 +1029,16 @@ html.dark-theme .channel-cal-panel {
   background: #111827;
   border-color: #1f2937;
 }
+
 html.dark-theme .panel-header h3 {
   color: #ffffff;
 }
+
 html.dark-theme .mini-day-cell {
   border-color: #1f2937;
   color: #f8fafc;
 }
+
 html.dark-theme .panel-add-event input, html.dark-theme .panel-add-event select {
   background: #1f2937;
   border-color: #374151;
@@ -1135,11 +1129,13 @@ html.dark-theme .panel-add-event input, html.dark-theme .panel-add-event select 
 html.dark-theme .details-header h4 {
   color: #f8fafc;
 }
+
 html.dark-theme .event-detail-badge.badge-projet {
   background: #064e3b;
   border-color: #047857;
   color: #a7f3d0;
 }
+
 html.dark-theme .event-detail-badge.badge-occupe {
   background: #7f1d1d;
   border-color: #991b1b;
@@ -1231,36 +1227,19 @@ html.dark-theme .upcoming-event-item {
   border-color: #1f2937;
   border-left-color: #10b981;
 }
+
 html.dark-theme .event-date-badge {
   background: #1f2937;
 }
+
 html.dark-theme .event-badge-day,
 html.dark-theme .event-name {
   color: #f8fafc;
 }
 
-.chat-back-mobile {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #ea580c;
-  padding: 0 8px 0 0;
-  cursor: pointer;
-}
-
-@media (max-width: 900px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  .stats-row {
-    grid-template-columns: 1fr;
-  }
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
+/* ========================================================
+   RESPONSIVE DESIGN (MOBILE & TABLETTE)
+   ======================================================== */
 @media (max-width: 768px) {
   body {
     margin-left: 0;
@@ -1272,13 +1251,13 @@ html.dark-theme .event-name {
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 64px;
+    height: 60px;
     flex-direction: row;
-    padding: 0 12px;
+    padding: 0 16px;
     box-shadow: 0 -4px 20px rgba(234, 88, 12, 0.2);
   }
 
-  .sidebar-brand {
+  .sidebar-brand, .sidebar-bottom {
     display: none;
   }
 
@@ -1290,10 +1269,7 @@ html.dark-theme .event-name {
     flex-direction: row;
     justify-content: space-around;
     gap: 0;
-  }
-
-  .sidebar-nav li {
-    width: auto;
+    width: 100%;
   }
 
   .nav-item {
@@ -1302,8 +1278,12 @@ html.dark-theme .event-name {
     border-radius: 12px;
   }
 
-  .sidebar-bottom {
-    margin-left: 4px;
+  .nav-badge {
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
   }
 
   .content {
@@ -1312,54 +1292,62 @@ html.dark-theme .event-name {
   }
 
   .welcome-header h1 {
-    font-size: 22px;
-  }
-
-  .home-hero {
-    padding: 20px;
-  }
-
-  .hero-text h1 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .chat-hub-layout {
     grid-template-columns: 1fr;
-    height: calc(100vh - 170px);
-    border-radius: 14px;
+    height: calc(100vh - 160px);
+    min-height: 440px;
   }
 
   .chat-cards-list {
     display: flex;
-    width: 100%;
     height: 100%;
+  }
+
+  .chat-cards-list.mobile-hidden {
+    display: none;
   }
 
   .chat-window-card {
     display: none;
-    width: 100%;
-    height: 100%;
   }
 
-  .chat-hub-layout.mobile-chat-open .chat-cards-list {
-    display: none;
-  }
-
-  .chat-hub-layout.mobile-chat-open .chat-window-card {
+  .chat-window-card.mobile-active {
     display: flex;
   }
 
-  .chat-back-mobile {
-    display: inline-block;
+  .btn-mobile-back {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    cursor: pointer;
   }
 
   .channel-cal-panel {
     width: 100%;
   }
-}
 
-@media (max-width: 600px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
   .cards-grid {
     grid-template-columns: 1fr;
+  }
+
+  .card {
+    flex: 1 1 100%;
   }
 }
