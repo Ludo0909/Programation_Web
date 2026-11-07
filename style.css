@@ -1236,150 +1236,169 @@ html.dark-theme .event-badge-day,
 html.dark-theme .event-name {
   color: #f8fafc;
 }
+
+/* Le FAB est masqué sur grand écran */
+.fab-container {
+  display: none;
+}
+
 @media (max-width: 768px) {
   body {
-    margin-left: 0;
-    margin-bottom: 72px; 
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
   }
 
+  /* La barre orange est complètement masquée sur mobile */
   .sidebar-orange {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 64px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 6px;
-    box-shadow: 0 -4px 20px rgba(234, 88, 12, 0.2);
-    z-index: 2000;
+    display: none !important;
   }
 
-  .sidebar-brand,
-  .sidebar-bottom {
-    display: flex !important;
-    flex-direction: row;
+  /* Conteneur flottant */
+  .fab-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 3000;
+  }
+
+  /* Bouton rond principal */
+  .fab-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff7a18, #ea580c);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 18px rgba(234, 88, 12, 0.45);
+    display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.25s ease, background-color 0.2s ease;
   }
 
-  .brand-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+  .fab-container.active .fab-btn {
+    transform: rotate(45deg);
+    background: #1e293b;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 
-  .brand-avatar svg {
+  /* Liste verticale d'icônes déployées */
+  .fab-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fab-container.active .fab-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Boutons d'action secondaires */
+  .fab-item {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #ea580c;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+
+  .fab-item:active {
+    transform: scale(0.92);
+  }
+
+  .fab-item svg {
     width: 20px;
     height: 20px;
   }
 
-  .sidebar-nav {
-    width: auto;
-    flex: 1;
+  html.dark-theme .fab-item {
+    background: #1f2937;
+    border-color: #374151;
+    color: #ff7a18;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
   }
 
-  .sidebar-nav ul {
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 0;
-    width: 100%;
-  }
-
-  .sidebar-nav li {
-    width: auto;
-  }
-
-  .nav-item {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-  }
-
-  .nav-item svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .nav-badge {
-    top: 2px;
-    right: 2px;
-    min-width: 15px;
-    height: 15px;
-    font-size: 9px;
-  }
-
+  /* Le chat occupe tout l'écran mobile et le clavier n'est plus gêné */
   .content {
-    padding: 12px;
-    gap: 16px;
+    padding: 12px !important;
+    gap: 14px !important;
   }
 
   .chat-hub-layout {
-    grid-template-columns: 1fr;
-    height: calc(100dvh - 160px);
-    min-height: 400px;
-    border-radius: 14px;
+    grid-template-columns: 1fr !important;
+    height: calc(100dvh - 90px) !important;
+    min-height: 420px !important;
+    border-radius: 16px !important;
   }
 
   .chat-cards-list {
-    display: flex;
-    height: 100%;
+    display: flex !important;
+    height: 100% !important;
   }
 
   .chat-cards-list.mobile-hidden {
-    display: none;
+    display: none !important;
   }
 
   .chat-window-card {
-    display: none;
-    height: 100%;
+    display: none !important;
+    height: 100% !important;
   }
 
   .chat-window-card.mobile-active {
-    display: flex;
+    display: flex !important;
   }
 
   .btn-mobile-back {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    background: #f1f5f9;
+    background: #f1f5f9 !important;
     border: none;
     border-radius: 8px;
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
-    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+    cursor: pointer !important;
   }
 
+  /* La barre d'envoi prend toute la largeur sans être masquée */
   .chat-input-bar {
-    padding: 10px 12px;
-    background: #ffffff;
-    z-index: 10;
+    padding: 10px 14px !important;
+    background: #ffffff !important;
   }
 
   .chat-input-bar input {
-    padding: 10px 14px;
-    font-size: 14px;
-  }
-
-  .chat-input-bar button {
-    padding: 10px 16px;
-  }
-
-  .channel-cal-panel {
-    width: 100%;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
   }
 
   .dashboard-grid,
   .stats-row,
   .cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .card {
-    flex: 1 1 100%;
+    flex: 1 1 100% !important;
   }
 }
