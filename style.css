@@ -1248,12 +1248,29 @@ html.dark-theme .event-name {
     margin-bottom: 0 !important;
   }
 
-  /* La barre orange est complètement masquée sur mobile */
+  .fab-container {
+    pointer-events: none; 
+    touch-action: manipulation;
+  }
+
+  .fab-btn {
+    pointer-events: auto; 
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+
+  .fab-menu {
+    pointer-events: none;
+  }
+
+  .fab-container.active .fab-menu,
+  .fab-container.active .fab-item {
+    pointer-events: auto;
+  }
   .sidebar-orange {
     display: none !important;
   }
 
-  /* Conteneur flottant */
   .fab-container {
     display: flex;
     flex-direction: column;
@@ -1264,7 +1281,6 @@ html.dark-theme .event-name {
     z-index: 3000;
   }
 
-  /* Bouton rond principal */
   .fab-btn {
     width: 54px;
     height: 54px;
@@ -1286,7 +1302,6 @@ html.dark-theme .event-name {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 
-  /* Liste verticale d'icônes déployées */
   .fab-menu {
     display: flex;
     flex-direction: column;
@@ -1305,7 +1320,6 @@ html.dark-theme .event-name {
     transform: translateY(0) scale(1);
   }
 
-  /* Boutons d'action secondaires */
   .fab-item {
     width: 44px;
     height: 44px;
@@ -1337,7 +1351,6 @@ html.dark-theme .event-name {
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
   }
 
-  /* Le chat occupe tout l'écran mobile et le clavier n'est plus gêné */
   .content {
     padding: 12px !important;
     gap: 14px !important;
@@ -1381,7 +1394,6 @@ html.dark-theme .event-name {
     cursor: pointer !important;
   }
 
-  /* La barre d'envoi prend toute la largeur sans être masquée */
   .chat-input-bar {
     padding: 10px 14px !important;
     background: #ffffff !important;
