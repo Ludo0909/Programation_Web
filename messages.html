@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="theme.js"></script>
   <script src="supabase-service.js" defer></script>
+  <script src="notifications.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -36,6 +37,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
+            <span id="badge-msg-channels" class="nav-badge" style="display: none;">0</span>
           </a>
         </li>
         <li>
@@ -44,6 +46,7 @@
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
+            <span id="badge-msg-dms" class="nav-badge" style="display: none;">0</span>
           </a>
         </li>
         <li>
@@ -74,7 +77,6 @@
     </header>
 
     <div class="chat-hub-layout">
-      <!-- Liste des salons -->
       <div class="chat-cards-list">
         <div class="chat-list-header">
           <div class="d-flex justify-content-between align-items-center mb-2">
@@ -100,22 +102,24 @@
         <div id="chat-container" class="chat-main">
           <div class="chat-header">
             <div class="d-flex align-items-center gap-3">
+              <button id="btn-mobile-back" class="btn-mobile-back" style="display: none;" title="Retour">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
               <div class="avatar" id="header-avatar">#</div>
               <div>
                 <h5 class="mb-0 fw-bold" id="span-channel-title">Nom du salon</h5>
-                <span class="status-online">● en direct</span>
               </div>
-              <div class="chat-header-actions">
-                <button id="btn-toggle-calendar" class="btn-cal-header" title="Calendrier du groupe">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            </div>
+            <div class="chat-header-actions">
+              <button id="btn-toggle-calendar" class="btn-cal-header" title="Calendrier du groupe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                   <line x1="16" y1="2" x2="16" y2="6"></line>
                   <line x1="8" y1="2" x2="8" y2="6"></line>
                   <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <span>Calendrier</span>
-                </button>
-              </div>
+                </svg>
+                <span>Calendrier</span>
+              </button>
             </div>
           </div>
           <div id="div-messages" class="messages-area"></div>
@@ -130,56 +134,54 @@
             </button>
           </form>
         </div>
-<div id="channel-calendar-panel" class="channel-cal-panel hidden">
-  <div class="panel-header">
-    <h3>Calendrier : <span id="cal-channel-name">--</span></h3>
-    <button id="btn-close-channel-cal" class="btn-close-panel">&times;</button>
-  </div>
-
-  <div class="panel-calendar-controls">
-    <button id="cal-panel-prev">&larr;</button>
-    <span id="cal-panel-month">Mois Année</span>
-    <button id="cal-panel-next">&rarr;</button>
-  </div>
-
-  <div class="mini-calendar-weekdays">
-    <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
-  </div>
-  <div id="mini-calendar-days" class="mini-calendar-grid"></div>
-  <div class="panel-day-details">
-    <div class="details-header">
-      <h4>Créneaux du <span id="details-date-title">--</span></h4>
-    </div>
-    <div id="day-events-list" class="day-events-list">
-      <p class="empty-events-text">Cliquez sur un jour pour voir les disponibilités.</p>
-    </div>
-  </div>
-  <div class="panel-add-event">
-    <h4>Ajouter un créneau</h4>
-    <form id="panel-event-form">
-      <input type="text" id="panel-event-title" placeholder="Ex: Révision partiels / Absent" required>
-      <select id="panel-event-category">
-        <option value="projet">Réunion / Projet (Vert)</option>
-        <option value="occupe">Occupé / Pas dispo (Rouge)</option>
-      </select>
-      <div class="panel-field-group">
-        <label>Début :</label>
-        <div class="panel-datetime-row">
-          <input type="date" id="panel-event-start-date" required>
-          <input type="time" id="panel-event-start-time" value="09:00" required>
+        <div id="channel-calendar-panel" class="channel-cal-panel hidden">
+          <div class="panel-header">
+            <h3>Calendrier : <span id="cal-channel-name">--</span></h3>
+            <button id="btn-close-channel-cal" class="btn-close-panel">&times;</button>
+          </div>
+          <div class="panel-calendar-controls">
+            <button id="cal-panel-prev">&larr;</button>
+            <span id="cal-panel-month">Mois Année</span>
+            <button id="cal-panel-next">&rarr;</button>
+          </div>
+          <div class="mini-calendar-weekdays">
+            <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+          </div>
+          <div id="mini-calendar-days" class="mini-calendar-grid"></div>
+          <div class="panel-day-details">
+            <div class="details-header">
+              <h4>Créneaux du <span id="details-date-title">--</span></h4>
+            </div>
+            <div id="day-events-list" class="day-events-list">
+              <p class="empty-events-text">Cliquez sur un jour pour voir les disponibilités.</p>
+            </div>
+          </div>
+          <div class="panel-add-event">
+            <h4>Ajouter un créneau</h4>
+            <form id="panel-event-form">
+              <input type="text" id="panel-event-title" placeholder="Ex: Révision partiels / Absent" required>
+              <select id="panel-event-category">
+                <option value="projet">Réunion / Projet (Vert)</option>
+                <option value="occupe">Occupé / Pas dispo (Rouge)</option>
+              </select>
+              <div class="panel-field-group">
+                <label>Début :</label>
+                <div class="panel-datetime-row">
+                  <input type="date" id="panel-event-start-date" required>
+                  <input type="time" id="panel-event-start-time" value="09:00" required>
+                </div>
+              </div>
+              <div class="panel-field-group">
+                <label>Fin :</label>
+                <div class="panel-datetime-row">
+                  <input type="date" id="panel-event-end-date" required>
+                  <input type="time" id="panel-event-end-time" value="18:00" required>
+                </div>
+              </div>
+              <button type="submit" class="btn-add-event">Enregistrer le créneau</button>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="panel-field-group">
-        <label>Fin :</label>
-        <div class="panel-datetime-row">
-          <input type="date" id="panel-event-end-date" required>
-          <input type="time" id="panel-event-end-time" value="18:00" required>
-        </div>
-      </div>
-      <button type="submit" class="btn-add-event">Enregistrer le créneau</button>
-    </form>
-  </div>
-</div>
       </div>
     </div>
   </main>

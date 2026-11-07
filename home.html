@@ -1,313 +1,266 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title>WorkFlow - Accueil</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="theme.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-service.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WorkFlow - Accueil</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-service.js"></script>
+  <script src="notifications.js" defer></script>
 </head>
 <body>
-    <aside class="sidebar-orange">
-        <a href="profil.html" class="sidebar-brand">
-            <div class="brand-avatar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            </div>
-        </a>
-        <nav class="sidebar-nav">
-            <ul>
-                <li>
-                    <a href="home.html" class="nav-item active" title="Accueil">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                    </a>
-                </li>
-                <li>
-                    <a href="messages.html" class="nav-item" title="Messagerie">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </a>
-                </li>
-                <li>
-  <a href="message_prive.html" class="nav-item" title="Messages Privés">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-      <polyline points="22,6 12,13 2,6"></polyline>
-    </svg>
-  </a>
-</li>
-                <li>
-                    <a href="contacts.html" class="nav-item" title="Contacts">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="7" r="4"></circle>
-                            <path d="M5.5 21a8.38 8.38 0 0 1 13 0"></path>
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <div class="sidebar-bottom">
-            <a href="parametre.html" class="nav-item" title="Paramètres">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-            </a>
-        </div>
-    </aside>
+  <aside class="sidebar-orange">
+    <a href="profil.html" class="sidebar-brand">
+      <div class="brand-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a href="home.html" class="nav-item active" title="Accueil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="messages.html" class="nav-item" title="Messagerie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span id="badge-msg-channels" class="nav-badge" style="display: none;">0</span>
+          </a>
+        </li>
+        <li>
+          <a href="message_prive.html" class="nav-item" title="Messages Privés">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span id="badge-msg-dms" class="nav-badge" style="display: none;">0</span>
+          </a>
+        </li>
+        <li>
+          <a href="contacts.html" class="nav-item" title="Contacts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="parametre.html" class="nav-item" title="Paramètres">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </a>
+    </div>
+  </aside>
 
-    <main class="content">
-        <section class="home-hero">
-            <div class="hero-text">
-                <span class="hero-badge">Espace Étudiant</span>
-                <h1>Bonjour, <span id="user-display-name">Étudiant</span> 👋</h1>
-                <p>Prêt pour vos cours ? Suivez vos discussions d'équipe et vos tâches du jour en direct.</p>
-                <div class="hero-actions">
-                    <a href="messages.html" class="btn-hero-primary">Ouvrir le Chat</a>
-                    <a href="groupes.html" class="btn-hero-secondary">Mes groupes</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. Statistiques clés -->
-        <section class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <h3 id="stat-channels">--</h3>
-                    <p>Salons disponibles</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <h3>En ligne</h3>
-                    
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <h3 id="current-time">--:--</h3>
-                    <p id="current-date">Aujourd'hui</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Grille Dashboard (Salons récents & To-Do List) -->
-        <section class="dashboard-grid">
-            <!-- Colonne Salons Récents -->
-            <!-- Exemple de bloc dans home.html -->
-<div class="dashboard-card">
-  <div class="card-header">
-    <h3>Choses à venir</h3>
-  </div>
-  <div id="upcoming-events-list" class="upcoming-events-list">
-    <div class="text-muted small">Chargement des événements...</div>
-  </div>
-</div>
-            </div>
-
-            <!-- Colonne Bloc-Notes / Tâches -->
-            <div class="dash-card">
-                <div class="dash-card-header">
-                    <h2>Mes devoirs & rappels</h2>
-                    <span class="badge-count" id="todo-count">0</span>
-                </div>
-                <form id="todo-form" class="todo-input-group">
-                    <input type="text" id="todo-input" placeholder="Ex: Rendu de projet vendredi..." required>
-                    <button type="submit">+</button>
-                </form>
-                <ul id="todo-list" class="todo-items"></ul>
-            </div>
-        </section>
-    </main>
-
-    <!-- Script de dynamisation de l'accueil -->
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            // 1. Horloge & Date
-            const timeEl = document.getElementById("current-time");
-            const dateEl = document.getElementById("current-date");
-            const updateClock = () => {
-                const now = new Date();
-                timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                dateEl.textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
-            };
-            updateClock();
-            setInterval(updateClock, 30000);
-
-            // 2. Utilisateur connecté
-            const { user } = await AuthService.getUser();
-            if (user) {
-                const name = user.user_metadata?.username || user.email.split('@')[0];
-                document.getElementById("user-display-name").textContent = name;
-            }
-
-            // 3. Charger le nombre et l'aperçu des salons Supabase
-            try {
-                const { data: channels } = await ChatDatabase.fetchChannels();
-                const container = document.getElementById("home-channels-list");
-                const statChannels = document.getElementById("stat-channels");
-                
-                if (channels && channels.length > 0) {
-                    statChannels.textContent = channels.length;
-                    container.innerHTML = channels.slice(0, 4).map(ch => `
-                        <a href="messages.html" class="quick-channel-item">
-                            <span class="channel-hashtag">#</span>
-                            <div class="channel-meta">
-                                <strong>${ch.name}</strong>
-                                <small>Accéder à la discussion</small>
-                            </div>
-                            <span class="channel-arrow">→</span>
-                        </a>
-                    `).join("");
-                } else {
-                    statChannels.textContent = "0";
-                    container.innerHTML = '<div class="empty-state">Aucun salon pour le moment.</div>';
-                }
-            } catch (err) {
-                console.error(err);
-            }
-
-            // 4. To-Do List simple persistante (localStorage)
-            const todoForm = document.getElementById("todo-form");
-            const todoInput = document.getElementById("todo-input");
-            const todoList = document.getElementById("todo-list");
-            const todoCount = document.getElementById("todo-count");
-
-            let todos = JSON.parse(localStorage.getItem("workflow_todos") || "[]");
-
-            const renderTodos = () => {
-                todoCount.textContent = todos.length;
-                if (todos.length === 0) {
-                    todoList.innerHTML = '<li class="empty-todo">Aucune tâche pour aujourd\'hui !</li>';
-                    return;
-                }
-                todoList.innerHTML = todos.map((item, index) => `
-                    <li class="todo-item ${item.done ? 'done' : ''}">
-                        <label>
-                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${index})">
-                            <span>${item.text}</span>
-                        </label>
-                        <button onclick="removeTodo(${index})" class="todo-del">×</button>
-                    </li>
-                `).join("");
-            };
-
-            window.toggleTodo = (index) => {
-                todos[index].done = !todos[index].done;
-                localStorage.setItem("workflow_todos", JSON.stringify(todos));
-                renderTodos();
-            };
-
-            window.removeTodo = (index) => {
-                todos.splice(index, 1);
-                localStorage.setItem("workflow_todos", JSON.stringify(todos));
-                renderTodos();
-            };
-
-            todoForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-                const text = todoInput.value.trim();
-                if (!text) return;
-                todos.push({ text, done: false });
-                localStorage.setItem("workflow_todos", JSON.stringify(todos));
-                todoInput.value = "";
-                renderTodos();
-            });
-
-            renderTodos();
-        });
-        document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Vérification de la session
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if (!user) {
-    window.location.replace("./index.html");
-    return;
-  }
-
-  // 2. Charger les événements
-  await loadUpcomingEvents();
-});
-
-async function loadUpcomingEvents() {
-  const container = document.getElementById("upcoming-events-list");
-  if (!container) return;
-
-  const nowIso = new Date().toISOString();
-
-  // Requête Supabase : exclut "occupe" et garde les dates >= maintenant
-  const { data: events, error } = await supabaseClient
-    .from("events")
-    .select("id, title, start_time, end_time, category, username, channels(name)")
-    .neq("category", "occupe")
-    .gte("end_time", nowIso)
-    .order("start_time", { ascending: true })
-    .limit(5); // On prend les 5 prochains
-
-  if (error) {
-    console.error("Erreur événements :", error.message);
-    container.innerHTML = '<p class="text-danger small">Impossible de charger les événements.</p>';
-    return;
-  }
-
-  if (!events || events.length === 0) {
-    container.innerHTML = '<p class="text-muted small">Aucun événement à venir.</p>';
-    return;
-  }
-
-  // 3. Rendu HTML
-  container.innerHTML = events.map(ev => {
-    const startDate = new Date(ev.start_time);
-    const dateFormatted = startDate.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
-    const timeFormatted = startDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-    const channelName = ev.channels?.name ? `#${ev.channels.name}` : "Général";
-    const author = ev.username || "Membre";
-
-    return `
-      <div class="upcoming-event-item">
-        <div class="event-date-badge">
-          <span class="event-badge-day">${dateFormatted}</span>
-          <span class="event-badge-hour">${timeFormatted}</span>
-        </div>
-        <div class="event-info">
-          <div class="event-title-line">
-            <span class="event-name">${ev.title}</span>
-            <span class="event-channel-tag">${channelName}</span>
-          </div>
-          <small class="event-meta">Créé par ${author}</small>
+  <main class="content">
+    <section class="home-hero">
+      <div class="hero-text">
+        <span class="hero-badge">Espace Étudiant</span>
+        <h1>Bonjour, <span id="user-display-name">Étudiant</span> 👋</h1>
+        <p>Prêt pour vos cours ? Suivez vos discussions d'équipe et vos tâches du jour en direct.</p>
+        <div class="hero-actions">
+          <a href="messages.html" class="btn-hero-primary">Ouvrir le Chat</a>
+          <a href="groupes.html" class="btn-hero-secondary">Mes groupes</a>
         </div>
       </div>
-    `;
-  }).join("");
-}
-    </script>
+    </section>
+
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-channels">--</h3>
+          <p>Salons disponibles</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <h3 id="current-time">--:--</h3>
+          <p id="current-date">Aujourd'hui</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Choses à venir</h3>
+        </div>
+        <div id="upcoming-events-list" class="upcoming-events-list">
+          <div class="text-muted small">Chargement des événements...</div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <h2>Mes devoirs & rappels</h2>
+          <span class="badge-count" id="todo-count">0</span>
+        </div>
+        <form id="todo-form" class="todo-input-group">
+          <input type="text" id="todo-input" placeholder="Ex: Rendu de projet vendredi..." required>
+          <button type="submit">+</button>
+        </form>
+        <ul id="todo-list" class="todo-items"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const timeEl = document.getElementById("current-time");
+      const dateEl = document.getElementById("current-date");
+      const updateClock = () => {
+        const now = new Date();
+        timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        dateEl.textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+      };
+      updateClock();
+      setInterval(updateClock, 30000);
+
+      const { user } = await AuthService.getUser();
+      if (!user) {
+        window.location.replace("./index.html");
+        return;
+      }
+      const name = user.user_metadata?.username || user.email.split('@')[0];
+      document.getElementById("user-display-name").textContent = name;
+
+      try {
+        const { data: channels } = await ChatDatabase.fetchChannels();
+        const statChannels = document.getElementById("stat-channels");
+        if (statChannels) statChannels.textContent = channels ? channels.length : "0";
+      } catch (err) {
+        console.error(err);
+      }
+
+      const todoForm = document.getElementById("todo-form");
+      const todoInput = document.getElementById("todo-input");
+      const todoList = document.getElementById("todo-list");
+      const todoCount = document.getElementById("todo-count");
+
+      let todos = JSON.parse(localStorage.getItem("workflow_todos") || "[]");
+
+      const renderTodos = () => {
+        todoCount.textContent = todos.length;
+        if (todos.length === 0) {
+          todoList.innerHTML = '<li class="empty-todo">Aucune tâche pour aujourd\'hui !</li>';
+          return;
+        }
+        todoList.innerHTML = todos.map((item, index) => `
+          <li class="todo-item ${item.done ? 'done' : ''}">
+            <label>
+              <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${index})">
+              <span>${item.text}</span>
+            </label>
+            <button onclick="removeTodo(${index})" class="todo-del">×</button>
+          </li>
+        `).join("");
+      };
+
+      window.toggleTodo = (index) => {
+        todos[index].done = !todos[index].done;
+        localStorage.setItem("workflow_todos", JSON.stringify(todos));
+        renderTodos();
+      };
+
+      window.removeTodo = (index) => {
+        todos.splice(index, 1);
+        localStorage.setItem("workflow_todos", JSON.stringify(todos));
+        renderTodos();
+      };
+
+      todoForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const text = todoInput.value.trim();
+        if (!text) return;
+        todos.push({ text, done: false });
+        localStorage.setItem("workflow_todos", JSON.stringify(todos));
+        todoInput.value = "";
+        renderTodos();
+      });
+
+      renderTodos();
+      await loadUpcomingEvents();
+    });
+
+    async function loadUpcomingEvents() {
+      const container = document.getElementById("upcoming-events-list");
+      if (!container) return;
+
+      const nowIso = new Date().toISOString();
+
+      const { data: events, error } = await supabaseClient
+        .from("events")
+        .select("id, title, start_time, end_time, category, username, channels(name)")
+        .neq("category", "occupe")
+        .gte("end_time", nowIso)
+        .order("start_time", { ascending: true })
+        .limit(5);
+
+      if (error) {
+        console.error("Erreur événements :", error.message);
+        container.innerHTML = '<p class="text-danger small">Impossible de charger les événements.</p>';
+        return;
+      }
+
+      if (!events || events.length === 0) {
+        container.innerHTML = '<p class="text-muted small">Aucun événement à venir.</p>';
+        return;
+      }
+
+      container.innerHTML = events.map(ev => {
+        const startDate = new Date(ev.start_time);
+        const dateFormatted = startDate.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+        const timeFormatted = startDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+        const channelName = ev.channels?.name ? `#${ev.channels.name}` : "Général";
+        const author = ev.username || "Membre";
+
+        return `
+          <div class="upcoming-event-item">
+            <div class="event-date-badge">
+              <span class="event-badge-day">${dateFormatted}</span>
+              <span class="event-badge-hour">${timeFormatted}</span>
+            </div>
+            <div class="event-info">
+              <div class="event-title-line">
+                <span class="event-name">${ev.title}</span>
+                <span class="event-channel-tag">${channelName}</span>
+              </div>
+              <small class="event-meta">Créé par ${author}</small>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  </script>
 </body>
 </html>
