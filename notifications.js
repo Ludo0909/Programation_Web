@@ -1,7 +1,10 @@
-async function initNavNotifications() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if (!user) return;
+let realtimeNotifChannel = null;
 
+async function initNavNotifications() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session || !session.user) return;
+
+  const currentUserId = session.user.id;
   const badgeChannels = document.getElementById("badge-msg-channels");
   const badgeDMs = document.getElementById("badge-msg-dms");
 
@@ -12,31 +15,43 @@ async function initNavNotifications() {
   updateBadge(badgeDMs, unreadDMs);
 
   const currentPage = window.location.pathname.split("/").pop();
-  if (currentPage === "messages.html" && badgeChannels) {
+  if (currentPage === "messages.html") {
     localStorage.setItem("unread_channels_count", "0");
     updateBadge(badgeChannels, 0);
   }
-  if (currentPage === "message_prive.html" && badgeDMs) {
+  if (currentPage === "message_prive.html") {
     localStorage.setItem("unread_dms_count", "0");
     updateBadge(badgeDMs, 0);
   }
 
-  supabaseClient
-    .channel("global_aside_notifications")
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
-      if (currentPage !== "messages.html" && payload.new.created_by !== user.id) {
-        let count = Number(localStorage.getItem("unread_channels_count") || 0) + 1;
-        localStorage.setItem("unread_channels_count", count.toString());
-        updateBadge(badgeChannels, count);
+  if (realtimeNotifChannel) {
+    supabaseClient.removeChannel(realtimeNotifChannel);
+  }
+
+  realtimeNotifChannel = supabaseClient
+    .channel("notifications-global")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "messages" },
+      (payload) => {
+        if (currentPage !== "messages.html" && payload.new.created_by !== currentUserId) {
+          let count = Number(localStorage.getItem("unread_channels_count") || 0) + 1;
+          localStorage.setItem("unread_channels_count", count.toString());
+          updateBadge(badgeChannels, count);
+        }
       }
-    })
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "direct_messages" }, (payload) => {
-      if (payload.new.receiver_id === user.id && currentPage !== "message_prive.html") {
-        let count = Number(localStorage.getItem("unread_dms_count") || 0) + 1;
-        localStorage.setItem("unread_dms_count", count.toString());
-        updateBadge(badgeDMs, count);
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "direct_messages" },
+      (payload) => {
+        if (currentPage !== "message_prive.html" && payload.new.receiver_id === currentUserId) {
+          let count = Number(localStorage.getItem("unread_dms_count") || 0) + 1;
+          localStorage.setItem("unread_dms_count", count.toString());
+          updateBadge(badgeDMs, count);
+        }
       }
-    })
+    )
     .subscribe();
 }
 
