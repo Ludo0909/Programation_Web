@@ -1,0 +1,251 @@
+/* ===== Page contacts =====
+   Les panneaux, champs, boutons et notifications viennent de profil.css. */
+
+.contacts-page {
+    gap: 28px;
+}
+
+.count {
+    display: inline-block;
+    min-width: 26px;
+    padding: 2px 8px;
+    margin-left: 6px;
+    border-radius: 999px;
+    background: #fff7ed;
+    color: #ea580c;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ---------- Formulaire d'ajout ---------- */
+
+.add-form {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.add-form .field {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.add-form .btn {
+    flex: none;
+    padding: 11px 22px;
+}
+
+/* Champ avec un « @ » devant */
+.username-input {
+    position: relative;
+}
+
+.username-input span {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.field .username-input input {
+    padding-left: 32px;
+}
+
+.search-field {
+    width: 260px;
+    max-width: 100%;
+    margin-bottom: 0;
+}
+
+/* ---------- Liste ---------- */
+
+.contact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    min-width: 0;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-item:hover {
+    border-color: #fed7aa;
+    box-shadow: 0 6px 14px rgba(234, 88, 12, 0.08);
+}
+
+.contact-item.is-new {
+    animation: contact-pop 1.2s ease;
+}
+
+@keyframes contact-pop {
+    0% {
+        border-color: #ea580c;
+        box-shadow: 0 0 0 4px rgba(255, 122, 24, 0.25);
+    }
+    100% {
+        border-color: #e2e8f0;
+        box-shadow: none;
+    }
+}
+
+.contact-avatar {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ff7a18 0%, #ea580c 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.contact-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.contact-name,
+.contact-username {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.contact-name {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.contact-username {
+    font-size: 13px;
+    color: #ea580c;
+}
+
+.contact-actions {
+    flex: none;
+    display: flex;
+    gap: 6px;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.icon-btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+.icon-btn:hover {
+    color: #ea580c;
+    border-color: #ea580c;
+    background: #fff7ed;
+}
+
+.icon-btn.danger:hover {
+    color: #dc2626;
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+.icon-btn:focus-visible {
+    outline: 3px solid rgba(255, 122, 24, 0.4);
+    outline-offset: 2px;
+}
+
+.empty-state {
+    margin: 0;
+    padding: 28px 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 14px;
+    border: 1.5px dashed #e2e8f0;
+    border-radius: 14px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+    .add-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-field {
+        width: 100%;
+    }
+
+    .contact-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Thème sombre ---------- */
+
+html.dark-theme .contact-item,
+html.dark-theme .icon-btn {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+html.dark-theme .contact-name {
+    color: #f8fafc;
+}
+
+html.dark-theme .contact-username {
+    color: #ff7a18;
+}
+
+html.dark-theme .icon-btn {
+    color: #cbd5e1;
+}
+
+html.dark-theme .icon-btn:hover {
+    background: rgba(255, 122, 24, 0.12);
+}
+
+html.dark-theme .icon-btn.danger:hover {
+    background: rgba(220, 38, 38, 0.15);
+}
+
+html.dark-theme .count {
+    background: rgba(255, 122, 24, 0.15);
+    color: #ff7a18;
+}
+
+html.dark-theme .empty-state {
+    border-color: #374151;
+    color: #94a3b8;
+}
