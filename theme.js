@@ -16,10 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     fabContainer.classList.toggle("active");
   };
 
-  // Détection prioritaire de l'appui tactile ou du clic
   fabBtn.addEventListener("pointerdown", toggleFab);
 
-  // Fermer le menu si on touche n'importe où ailleurs sur l'écran
   document.addEventListener("pointerdown", (e) => {
     if (!fabContainer.contains(e.target)) {
       fabContainer.classList.remove("active");
