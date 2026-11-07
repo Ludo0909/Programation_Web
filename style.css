@@ -1236,14 +1236,10 @@ html.dark-theme .event-badge-day,
 html.dark-theme .event-name {
   color: #f8fafc;
 }
-
-/* ========================================================
-   RESPONSIVE DESIGN (MOBILE & TABLETTE)
-   ======================================================== */
 @media (max-width: 768px) {
   body {
     margin-left: 0;
-    margin-bottom: 68px;
+    margin-bottom: 72px;
   }
 
   .sidebar-orange {
@@ -1251,18 +1247,31 @@ html.dark-theme .event-name {
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 60px;
+    height: 64px;
     flex-direction: row;
-    padding: 0 16px;
+    padding: 0 8px;
     box-shadow: 0 -4px 20px rgba(234, 88, 12, 0.2);
+    justify-content: space-around;
   }
 
   .sidebar-brand, .sidebar-bottom {
-    display: none;
+    display: flex !important;
+  }
+
+  .brand-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .brand-avatar svg {
+    width: 20px;
+    height: 20px;
   }
 
   .sidebar-nav {
-    width: 100%;
+    width: auto;
+    flex: 1;
   }
 
   .sidebar-nav ul {
@@ -1272,10 +1281,19 @@ html.dark-theme .event-name {
     width: 100%;
   }
 
+  .sidebar-nav li {
+    width: auto;
+  }
+
   .nav-item {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
+  }
+
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
   }
 
   .nav-badge {
