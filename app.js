@@ -12,8 +12,16 @@ const spanChannelTitle = document.getElementById("span-channel-title");
 const headerAvatar = document.getElementById("header-avatar");
 const chatPlaceholder = document.getElementById("chat-placeholder");
 const chatContainer = document.getElementById("chat-container");
+const chatCardsList = document.querySelector(".chat-cards-list");
+const chatWindowCard = document.querySelector(".chat-window-card");
+const btnMobileBack = document.getElementById("btn-mobile-back");
 
-// Créer un salon via la fenêtre modale
+btnMobileBack?.addEventListener("click", () => {
+  chatCardsList?.classList.remove("mobile-hidden");
+  chatWindowCard?.classList.remove("mobile-active");
+  document.querySelectorAll(".chat-card").forEach((b) => b.classList.remove("active"));
+});
+
 document.getElementById("form-channel")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = inputChannel.value.trim();
@@ -26,8 +34,6 @@ document.getElementById("form-channel")?.addEventListener("submit", async (e) =>
   }
 
   inputChannel.value = "";
-  
-  // Fermer la modale Bootstrap
   const modalEl = document.getElementById("newChannelModal");
   const modal = bootstrap.Modal.getInstance(modalEl);
   if (modal) modal.hide();
@@ -39,21 +45,18 @@ document.getElementById("form-channel")?.addEventListener("submit", async (e) =>
   }
 });
 
-// Filtrer les salons en direct
 searchChannels?.addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase();
   const filtered = allChannels.filter(c => c.name.toLowerCase().includes(query));
   renderChannels(filtered);
 });
 
-// Envoyer un message
 document.getElementById("form-message")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const content = inputMessage.value.trim();
   if (!content || !currentChannel || !currentUser) return;
 
   const displayName = currentUser.user_metadata?.username || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-
   inputMessage.value = "";
 
   const { error } = await ChatDatabase.sendMessage(
@@ -68,7 +71,6 @@ document.getElementById("form-message")?.addEventListener("submit", async (e) =>
   }
 });
 
-// Redirection si déconnecté
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
     StorageService.clearSession();
@@ -76,7 +78,6 @@ AuthService.onSessionChange((event, session) => {
   }
 });
 
-// Charger les salons
 async function loadChannels() {
   const { data: channels, error } = await ChatDatabase.fetchChannels();
   if (error) return;
@@ -125,6 +126,11 @@ async function selectChannel(cardElement, channel) {
   if (chatPlaceholder) chatPlaceholder.style.display = "none";
   if (chatContainer) chatContainer.classList.add("active");
 
+  if (window.innerWidth <= 768) {
+    chatCardsList?.classList.add("mobile-hidden");
+    chatWindowCard?.classList.add("mobile-active");
+  }
+
   if (spanChannelTitle) spanChannelTitle.textContent = "# " + channel.name;
   if (headerAvatar) headerAvatar.textContent = channel.name.charAt(0).toUpperCase();
 
@@ -167,7 +173,6 @@ function displayMessage(message) {
   divMessages.appendChild(msgDiv);
 }
 
-// Initialisation au chargement
 async function init() {
   const { user } = await AuthService.getUser();
   if (!user) {
@@ -179,7 +184,7 @@ async function init() {
   await loadChannels();
   ChatDatabase.subscribeToChannels(() => loadChannels());
 
-  if (currentChannel) {
+  if (currentChannel && window.innerWidth > 768) {
     const activeCard = document.querySelector(`[data-id="${currentChannel.id}"]`);
     if (activeCard) {
       selectChannel(activeCard, currentChannel);
@@ -189,9 +194,6 @@ async function init() {
 
 init();
 
-// ========================================================
-// GESTION DU CALENDRIER DE SALON (MULTI-JOURS & USERNAME)
-// ========================================================
 let currentCalDate = new Date();
 let channelEvents = [];
 let selectedCalDay = null;
@@ -213,7 +215,6 @@ btnCloseCal?.addEventListener("click", () => {
   calPanel.classList.add("hidden");
 });
 
-// Charger tous les événements du salon sélectionné
 async function loadChannelCalendar() {
   if (!currentChannel) return;
 
@@ -231,7 +232,6 @@ async function loadChannelCalendar() {
   }
 }
 
-// Vérifie si un jour donné est inclus dans une plage [start, end]
 function isDayInRange(dayStr, startTimeStr, endTimeStr) {
   const startDay = startTimeStr.split("T")[0];
   const endDay = endTimeStr.split("T")[0];
@@ -268,7 +268,6 @@ function renderMiniCalendar() {
 
     const formattedDay = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    // Événements actifs pour ce jour
     const matchingEvents = channelEvents.filter(e => isDayInRange(formattedDay, e.start_time, e.end_time));
     if (matchingEvents.some(e => e.category === "projet")) cell.classList.add("has-meeting");
     if (matchingEvents.some(e => e.category === "occupe")) cell.classList.add("has-busy");
@@ -280,7 +279,6 @@ function renderMiniCalendar() {
       renderMiniCalendar();
       displayDayDetails(formattedDay);
       
-      // Préremplir les champs de date avec le jour cliqué
       const inputStart = document.getElementById("panel-event-start-date");
       const inputEnd = document.getElementById("panel-event-end-date");
       if (inputStart) inputStart.value = formattedDay;
@@ -291,7 +289,6 @@ function renderMiniCalendar() {
   }
 }
 
-// Afficher qui a mis quoi pour le jour sélectionné
 function displayDayDetails(dayStr) {
   const container = document.getElementById("day-events-list");
   const title = document.getElementById("details-date-title");
@@ -329,7 +326,6 @@ function displayDayDetails(dayStr) {
   }).join("");
 }
 
-// Navigation du mois
 document.getElementById("cal-panel-prev")?.addEventListener("click", () => {
   currentCalDate.setMonth(currentCalDate.getMonth() - 1);
   renderMiniCalendar();
@@ -340,7 +336,6 @@ document.getElementById("cal-panel-next")?.addEventListener("click", () => {
   renderMiniCalendar();
 });
 
-// Enregistrer l'événement multi-jours avec le username
 document.getElementById("panel-event-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentChannel || !currentUser) return;

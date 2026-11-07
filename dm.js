@@ -12,8 +12,16 @@ const headerAvatar = document.getElementById("header-avatar");
 const divMessages = document.getElementById("div-messages");
 const formDirectMessage = document.getElementById("form-direct-message");
 const inputMessage = document.getElementById("input-message");
+const chatCardsList = document.querySelector(".chat-cards-list");
+const chatWindowCard = document.querySelector(".chat-window-card");
+const btnMobileBack = document.getElementById("btn-mobile-back");
 
-// Redirection si déconnexion
+btnMobileBack?.addEventListener("click", () => {
+  chatCardsList?.classList.remove("mobile-hidden");
+  chatWindowCard?.classList.remove("mobile-active");
+  document.querySelectorAll(".chat-card").forEach((c) => c.classList.remove("active"));
+});
+
 AuthService.onSessionChange((event, session) => {
   if (event === "SIGNED_OUT" || !session) {
     StorageService.clearSession();
@@ -31,7 +39,6 @@ async function init() {
   await loadUsers();
 }
 
-// Récupère les contacts (d'abord profiles, repli sur messages si absente)
 async function loadUsers() {
   let { data: users, error } = await supabaseClient
     .from("profiles")
@@ -44,9 +51,12 @@ async function loadUsers() {
       .select("created_by, username");
 
     const uniqueMap = new Map();
-    pastMessages?.forEach(m => {
+    pastMessages?.forEach((m) => {
       if (m.created_by && m.created_by !== currentUser.id && !uniqueMap.has(m.created_by)) {
-        uniqueMap.set(m.created_by, { id: m.created_by, username: m.username || "Membre" });
+        uniqueMap.set(m.created_by, {
+          id: m.created_by,
+          username: m.username || "Membre"
+        });
       }
     });
     users = Array.from(uniqueMap.values());
@@ -57,10 +67,11 @@ async function loadUsers() {
 }
 
 function renderUserList(users) {
+  if (!ulUsers) return;
   ulUsers.replaceChildren();
 
   if (users.length === 0) {
-    ulUsers.innerHTML = '<div class="text-center text-muted small py-4">Aucun membre trouvé.</div>';
+    ulUsers.innerHTML = '<div class="text-center text-muted small py-4">Aucun contact trouvé.</div>';
     return;
   }
 
@@ -89,7 +100,9 @@ function renderUserList(users) {
 
 searchUsersInput?.addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase();
-  const filtered = allUsers.filter(u => (u.username || "").toLowerCase().includes(query));
+  const filtered = allUsers.filter((u) =>
+    (u.username || "").toLowerCase().includes(query)
+  );
   renderUserList(filtered);
 });
 
@@ -100,22 +113,29 @@ async function selectRecipient(cardElement, user) {
   activeRecipient = user;
 
   if (chatPlaceholder) chatPlaceholder.style.display = "none";
-  if (chatContainer) chatContainer.classList.add("active"); // Active la classe définie dans style.css
+  if (chatContainer) chatContainer.classList.add("active");
 
-  spanUserTitle.textContent = user.username || "Membre";
-  headerAvatar.textContent = (user.username || "U").charAt(0).toUpperCase();
+  if (window.innerWidth <= 768) {
+    chatCardsList?.classList.add("mobile-hidden");
+    chatWindowCard?.classList.add("mobile-active");
+  }
+
+  if (spanUserTitle) spanUserTitle.textContent = user.username || "Membre";
+  if (headerAvatar) headerAvatar.textContent = (user.username || "U").charAt(0).toUpperCase();
 
   subscribeToDirectMessages();
   await loadDirectMessages();
 }
 
 async function loadDirectMessages() {
-  if (!activeRecipient || !currentUser) return;
+  if (!activeRecipient || !currentUser || !divMessages) return;
 
   const { data: messages, error } = await supabaseClient
     .from("direct_messages")
     .select("*")
-    .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeRecipient.id}),and(sender_id.eq.${activeRecipient.id},receiver_id.eq.${currentUser.id})`)
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeRecipient.id}),and(sender_id.eq.${activeRecipient.id},receiver_id.eq.${currentUser.id})`
+    )
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -124,7 +144,7 @@ async function loadDirectMessages() {
   }
 
   divMessages.replaceChildren();
-  (messages || []).forEach(msg => displayDirectMessage(msg));
+  (messages || []).forEach((msg) => displayDirectMessage(msg));
   divMessages.scrollTop = divMessages.scrollHeight;
 }
 
@@ -146,7 +166,7 @@ function subscribeToDirectMessages() {
 
         if (isFromCurrentChat) {
           displayDirectMessage(msg);
-          divMessages.scrollTop = divMessages.scrollHeight;
+          if (divMessages) divMessages.scrollTop = divMessages.scrollHeight;
         }
       }
     )
@@ -154,7 +174,9 @@ function subscribeToDirectMessages() {
 }
 
 function displayDirectMessage(msg) {
-  const isMine = msg.sender_id === currentUser.id;
+  if (!divMessages) return;
+
+  const isMine = currentUser && msg.sender_id === currentUser.id;
 
   const msgDiv = document.createElement("div");
   msgDiv.className = `message ${isMine ? "outgoing" : "incoming"}`;
@@ -166,8 +188,10 @@ function displayDirectMessage(msg) {
   timeSpan.className = "time";
 
   const d = msg.created_at ? new Date(msg.created_at) : new Date();
-  const timeFormatted = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
-  timeSpan.textContent = isMine ? timeFormatted : `${timeFormatted} · ${msg.sender_username || activeRecipient.username || 'Contact'}`;
+  const timeFormatted = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+  timeSpan.textContent = isMine
+    ? timeFormatted
+    : `${timeFormatted} · ${msg.sender_username || activeRecipient.username || "Contact"}`;
 
   msgDiv.append(textP, timeSpan);
   divMessages.appendChild(msgDiv);
@@ -178,7 +202,10 @@ formDirectMessage?.addEventListener("submit", async (e) => {
   const content = inputMessage.value.trim();
   if (!content || !activeRecipient || !currentUser) return;
 
-  const myUsername = currentUser.user_metadata?.username || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+  const myUsername =
+    currentUser.user_metadata?.username ||
+    currentUser.user_metadata?.full_name ||
+    currentUser.email.split("@")[0];
 
   inputMessage.value = "";
 
