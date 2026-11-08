@@ -1,14 +1,6 @@
 -- =====================================================================
--- WorkFlow : table des profils publics (page Contacts et messages privés)
--- À exécuter UNE fois dans Supabase : Dashboard > SQL Editor > New query,
--- coller tout ce fichier, puis « Run ».
--- Le script peut être relancé sans danger (if not exists / or replace).
+-- WorkFlow : table des profils publics
 -- =====================================================================
-
--- Le nom d'utilisateur est gardé dans les métadonnées de Supabase Auth,
--- que le navigateur ne peut pas lire pour les autres comptes. On le copie
--- dans une table « profiles » pour pouvoir lister et chercher les membres.
--- (dm.js lit déjà cette table pour la liste des messages privés.)
 
 create table if not exists public.profiles (
     id         uuid primary key references auth.users (id) on delete cascade,
@@ -28,8 +20,7 @@ create policy "Profils visibles par les membres connectés"
 grant select on public.profiles to authenticated;
 
 
--- Copie automatique : à l'inscription et quand le profil est modifié
--- (profil.js modifie les métadonnées avec auth.updateUser).
+-- Copie automatique
 create or replace function public.sync_profile_from_auth()
 returns trigger
 language plpgsql

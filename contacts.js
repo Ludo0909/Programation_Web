@@ -1,11 +1,4 @@
-// ===== Page contacts (Supabase) =====
-// Liste tous les membres de WorkFlow, avec une recherche par nom d'utilisateur
-// et un bouton pour démarrer une discussion privée.
-// Dépend de :
-//   - supabase-service.js : AuthService, StorageService, supabaseClient
-// Table utilisée (voir supabase/profiles.sql) :
-//   - profiles : id, username, full_name (copie publique des métadonnées de chaque compte)
-// Tout est dans une fonction pour ne pas entrer en conflit avec les variables des autres scripts.
+// ===== Page contacts =====
 
 (function () {
     "use strict";
@@ -20,11 +13,10 @@
     const count = $("contact-count");
 
     let currentUser = null;
-    let members = []; // [{ id, username, full_name }]
+    let members = [];
 
     // ---------- Utilitaires ----------
 
-    // Même rôle que notify() de profil.js
     function notify(element, text, type) {
         element.textContent = text;
         element.className = "notice show " + type;
@@ -44,7 +36,6 @@
         return member.full_name || member.username || "Membre";
     }
 
-    // La table n'existe pas encore dans Supabase (script SQL pas encore exécuté)
     function isMissingTable(error) {
         return error && (error.code === "PGRST205" || /could not find the table/i.test(error.message));
     }
@@ -68,7 +59,6 @@
     // ---------- Affichage ----------
 
     function render() {
-        // On accepte « @nom » ou « nom »
         const query = searchInput.value.trim().replace(/^@/, "").toLowerCase();
         const visible = members.filter((m) => (m.username || "").toLowerCase().includes(query));
 
@@ -94,7 +84,6 @@
             username.textContent = "@" + (member.username || "inconnu");
             info.append(name, username);
 
-            // message_prive.html reçoit l'identifiant du membre dans l'adresse
             const chatLink = document.createElement("a");
             chatLink.className = "chat-btn";
             chatLink.href = "message_prive.html?user=" + encodeURIComponent(member.id);
@@ -148,7 +137,6 @@
 
     // ---------- Démarrage ----------
 
-    // Même vérification que profil.js : supabase-service.js a pu planter au chargement
     function supabaseReady() {
         try {
             return Boolean(AuthService && StorageService && supabaseClient);
