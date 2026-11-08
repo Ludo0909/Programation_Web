@@ -10,7 +10,6 @@
         <script src="theme.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="supabase-service.js"></script>
-        <script src="script.js" defer></script>
         <script src="contacts.js" defer></script>
     </head>
 
@@ -73,46 +72,25 @@
 
         <main class="content contacts-page" id="contacts-page" hidden>
             <header class="welcome-header">
-                <h1>Mes contacts</h1>
-                <p>Retrouvez vos collègues et ajoutez-en de nouveaux grâce à leur nom d'utilisateur.</p>
+                <h1>Contacts</h1>
+                <p>Tous les membres de WorkFlow. Recherchez un collègue par son nom d'utilisateur et démarrez une discussion.</p>
             </header>
 
             <div id="page-message" class="notice" role="status" aria-live="polite"></div>
 
-            <!-- ===== Ajouter un contact ===== -->
-            <section class="panel" aria-labelledby="add-title">
-                <div class="panel-head">
-                    <div>
-                        <h2 id="add-title">Ajouter un contact</h2>
-                        <p class="panel-desc">Entrez le nom d'utilisateur exact de votre collègue (sans le @).</p>
-                    </div>
-                </div>
-
-                <div id="add-message" class="notice" role="status" aria-live="polite"></div>
-
-                <form id="add-form" class="add-form" novalidate>
-                    <div class="field">
-                        <label for="add-username" class="visually-hidden">Nom d'utilisateur</label>
-                        <div class="username-input">
-                            <span aria-hidden="true">@</span>
-                            <input type="text" id="add-username" placeholder="nom_utilisateur" autocomplete="off" spellcheck="false">
-                        </div>
-                        <p class="error" id="add-username-error"></p>
-                    </div>
-                    <button type="submit" class="btn" id="add-btn">Ajouter</button>
-                </form>
-            </section>
-
-            <!-- ===== Liste des contacts ===== -->
+            <!-- ===== Liste des membres ===== -->
             <section class="panel" aria-labelledby="list-title">
                 <div class="panel-head">
                     <div>
-                        <h2 id="list-title">Liste de contacts <span class="count" id="contact-count"></span></h2>
-                        <p class="panel-desc">Tous les collègues que vous avez ajoutés.</p>
+                        <h2 id="list-title">Membres <span class="count" id="contact-count"></span></h2>
+                        <p class="panel-desc">Cliquez sur « Discuter » pour lui écrire en privé.</p>
                     </div>
                     <div class="field search-field">
-                        <label for="search-contacts" class="visually-hidden">Rechercher un contact</label>
-                        <input type="search" id="search-contacts" placeholder="Rechercher un contact...">
+                        <label for="search-contacts" class="visually-hidden">Rechercher par nom d'utilisateur</label>
+                        <div class="username-input">
+                            <span aria-hidden="true">@</span>
+                            <input type="search" id="search-contacts" placeholder="nom d'utilisateur" autocomplete="off" spellcheck="false">
+                        </div>
                     </div>
                 </div>
 

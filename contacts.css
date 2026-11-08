@@ -1,5 +1,5 @@
 /* ===== Page contacts =====
-   Les panneaux, champs, boutons et notifications viennent de profil.css. */
+   Les panneaux, champs et notifications viennent de profil.css. */
 
 .contacts-page {
     gap: 28px;
@@ -19,23 +19,12 @@
     vertical-align: middle;
 }
 
-/* ---------- Formulaire d'ajout ---------- */
+/* ---------- Recherche ---------- */
 
-.add-form {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.add-form .field {
-    flex: 1;
-    min-width: 0;
+.search-field {
+    width: 280px;
+    max-width: 100%;
     margin-bottom: 0;
-}
-
-.add-form .btn {
-    flex: none;
-    padding: 11px 22px;
 }
 
 /* Champ avec un « @ » devant */
@@ -57,12 +46,6 @@
     padding-left: 32px;
 }
 
-.search-field {
-    width: 260px;
-    max-width: 100%;
-    margin-bottom: 0;
-}
-
 /* ---------- Liste ---------- */
 
 .contact-list {
@@ -70,7 +53,7 @@
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 14px;
 }
 
@@ -89,21 +72,6 @@
 .contact-item:hover {
     border-color: #fed7aa;
     box-shadow: 0 6px 14px rgba(234, 88, 12, 0.08);
-}
-
-.contact-item.is-new {
-    animation: contact-pop 1.2s ease;
-}
-
-@keyframes contact-pop {
-    0% {
-        border-color: #ea580c;
-        box-shadow: 0 0 0 4px rgba(255, 122, 24, 0.25);
-    }
-    100% {
-        border-color: #e2e8f0;
-        box-shadow: none;
-    }
 }
 
 .contact-avatar {
@@ -142,45 +110,35 @@
     color: #ea580c;
 }
 
-.contact-actions {
+/* Bouton « Discuter » */
+.chat-btn {
     flex: none;
-    display: flex;
-    gap: 6px;
-}
-
-.icon-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    background: #ffffff;
-    color: #64748b;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #ea580c;
+    background: #ffffff;
+    color: #ea580c;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.icon-btn svg {
-    width: 17px;
-    height: 17px;
+.chat-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
-.icon-btn:hover {
-    color: #ea580c;
-    border-color: #ea580c;
-    background: #fff7ed;
+.chat-btn:hover {
+    background: linear-gradient(180deg, #ff7a18 0%, #ea580c 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
 }
 
-.icon-btn.danger:hover {
-    color: #dc2626;
-    border-color: #dc2626;
-    background: #fef2f2;
-}
-
-.icon-btn:focus-visible {
+.chat-btn:focus-visible {
     outline: 3px solid rgba(255, 122, 24, 0.4);
     outline-offset: 2px;
 }
@@ -198,11 +156,6 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 600px) {
-    .add-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
     .search-field {
         width: 100%;
     }
@@ -214,8 +167,7 @@
 
 /* ---------- Thème sombre ---------- */
 
-html.dark-theme .contact-item,
-html.dark-theme .icon-btn {
+html.dark-theme .contact-item {
     background: #1f2937;
     border-color: #374151;
 }
@@ -228,16 +180,15 @@ html.dark-theme .contact-username {
     color: #ff7a18;
 }
 
-html.dark-theme .icon-btn {
-    color: #cbd5e1;
+html.dark-theme .chat-btn {
+    background: transparent;
+    color: #ff7a18;
+    border-color: #ff7a18;
 }
 
-html.dark-theme .icon-btn:hover {
-    background: rgba(255, 122, 24, 0.12);
-}
-
-html.dark-theme .icon-btn.danger:hover {
-    background: rgba(220, 38, 38, 0.15);
+html.dark-theme .chat-btn:hover {
+    background: #ea580c;
+    color: #ffffff;
 }
 
 html.dark-theme .count {
