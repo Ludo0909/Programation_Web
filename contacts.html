@@ -73,52 +73,27 @@
 
         <main class="content contacts-page" id="contacts-page" hidden>
             <header class="welcome-header">
-                <h1>Mes contacts</h1>
-                <p>Retrouvez vos collègues et ajoutez-en de nouveaux grâce à leur nom d'utilisateur.</p>
-            </header>
+    <h1>Annuaire des membres</h1>
+    <p>Retrouvez tous les membres inscrits sur WorkFlow et démarrez une discussion en un clic.</p>
+</header>
 
-            <div id="page-message" class="notice" role="status" aria-live="polite"></div>
+<div id="page-message" class="notice" role="status" aria-live="polite"></div>
 
-            <!-- ===== Ajouter un contact ===== -->
-            <section class="panel" aria-labelledby="add-title">
-                <div class="panel-head">
-                    <div>
-                        <h2 id="add-title">Ajouter un contact</h2>
-                        <p class="panel-desc">Entrez le nom d'utilisateur exact de votre collègue (sans le @).</p>
-                    </div>
-                </div>
+<section class="panel" aria-labelledby="list-title">
+    <div class="panel-head">
+        <div>
+            <h2 id="list-title">Utilisateurs enregistrés <span class="count" id="contact-count"></span></h2>
+            <p class="panel-desc">Cliquez sur la bulle de message pour échanger en privé.</p>
+        </div>
+        <div class="field search-field">
+            <label for="search-contacts" class="visually-hidden">Rechercher un membre</label>
+            <input type="search" id="search-contacts" placeholder="Rechercher un membre...">
+        </div>
+    </div>
 
-                <div id="add-message" class="notice" role="status" aria-live="polite"></div>
-
-                <form id="add-form" class="add-form" novalidate>
-                    <div class="field">
-                        <label for="add-username" class="visually-hidden">Nom d'utilisateur</label>
-                        <div class="username-input">
-                            <span aria-hidden="true">@</span>
-                            <input type="text" id="add-username" placeholder="nom_utilisateur" autocomplete="off" spellcheck="false">
-                        </div>
-                        <p class="error" id="add-username-error"></p>
-                    </div>
-                    <button type="submit" class="btn" id="add-btn">Ajouter</button>
-                </form>
-            </section>
-
-            <!-- ===== Liste des contacts ===== -->
-            <section class="panel" aria-labelledby="list-title">
-                <div class="panel-head">
-                    <div>
-                        <h2 id="list-title">Liste de contacts <span class="count" id="contact-count"></span></h2>
-                        <p class="panel-desc">Tous les collègues que vous avez ajoutés.</p>
-                    </div>
-                    <div class="field search-field">
-                        <label for="search-contacts" class="visually-hidden">Rechercher un contact</label>
-                        <input type="search" id="search-contacts" placeholder="Rechercher un contact...">
-                    </div>
-                </div>
-
-                <ul class="contact-list" id="contact-list"></ul>
-                <p class="empty-state" id="empty-state" hidden></p>
-            </section>
+    <ul class="contact-list" id="contact-list"></ul>
+    <p class="empty-state" id="empty-state" hidden></p>
+</section>
         </main>
         <div class="fab-container" id="fab-container">
   <div class="fab-menu" id="fab-menu">

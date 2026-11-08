@@ -225,4 +225,27 @@ formDirectMessage?.addEventListener("submit", async (e) => {
   }
 });
 
+async function init() {
+  const { user } = await AuthService.getUser();
+  if (!user) {
+    window.location.replace("./index.html");
+    return;
+  }
+  currentUser = user;
+  await loadUsers();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetId = urlParams.get("user_id");
+  const targetUsername = urlParams.get("username");
+
+  if (targetId) {
+    let targetUser = allUsers.find(u => u.id === targetId);
+    if (!targetUser) {
+      targetUser = { id: targetId, username: targetUsername || "Membre" };
+    }
+    const cardElement = document.querySelector(`[data-id="${targetId}"]`) || document.createElement("div");
+    selectRecipient(cardElement, targetUser);
+  }
+}
+
 init();
