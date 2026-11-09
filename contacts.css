@@ -108,6 +108,16 @@
     font-size: 13px;
     color: #ea580c;
 }
+.contact-actions {
+    margin-left: auto;
+    flex: none;
+    display: flex;
+    align-items: center;
+}
+
+.contact-item {
+    min-height: 72px;
+}
 
 /* Bouton « Discuter » */
 .chat-btn {
