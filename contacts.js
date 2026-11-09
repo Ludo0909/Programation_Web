@@ -153,6 +153,5 @@
         if (page) page.hidden = false;
         await loadAllPlatformUsers();
     }
-
     init();
 })();
