@@ -44,54 +44,56 @@
         );
 
         if (count) count.textContent = allUsers.length;
-        list.replaceChildren();
 
-        visible.forEach((user) => {
-            const item = document.createElement("li");
-            item.className = "contact-item";
-
-            const avatar = document.createElement("div");
-            avatar.className = "contact-avatar";
-            avatar.setAttribute("aria-hidden", "true");
-            avatar.textContent = initials(user.username);
-
-            const info = document.createElement("div");
-            info.className = "contact-info";
-            const name = document.createElement("div");
-            name.className = "contact-name";
-            name.textContent = user.username || "Membre";
-            const subtitle = document.createElement("div");
-            subtitle.className = "contact-username";
-            subtitle.textContent = "Membre actif";
-            info.append(name, subtitle);
-
-            const chatLink = document.createElement("a");
-            chatLink.className = "chat-btn";
-            chatLink.href = "message_prive.html?user=" + encodeURIComponent(member.id);
-            chatLink.setAttribute("aria-label", "Discuter avec " + displayName(member));
-            chatLink.append(svgIcon("M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"), "Discuter");
-
-            const messageLink = document.createElement("a");
-            messageLink.className = "icon-btn";
-            messageLink.href = `message_prive.html?user_id=${user.id}&username=${encodeURIComponent(user.username)}`;
-            messageLink.title = "Envoyer un message privé";
-            messageLink.setAttribute("aria-label", "Envoyer un message privé à " + user.username);
-            messageLink.appendChild(svgIcon(["M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"]));
-
-            actions.append(messageLink);
-            item.append(avatar, info, actions);
-            list.appendChild(item);
-        });
-
-        if (allUsers.length === 0) {
-            emptyState.textContent = "Aucun membre trouvé dans les messages.";
-            emptyState.hidden = false;
-        } else if (visible.length === 0) {
-            emptyState.textContent = "Aucun membre ne correspond à votre recherche.";
-            emptyState.hidden = false;
-        } else {
-            emptyState.hidden = true;
+        if (!list) {
+            console.error("Élément #contact-list introuvable dans le DOM");
+            return;
         }
+
+        // Si aucun utilisateur n'est trouvé
+        if (allUsers.length === 0) {
+            list.innerHTML = "";
+            if (emptyState) {
+                emptyState.textContent = "Aucun membre trouvé dans les messages.";
+                emptyState.hidden = false;
+            }
+            return;
+        }
+
+        if (visible.length === 0) {
+            list.innerHTML = "";
+            if (emptyState) {
+                emptyState.textContent = "Aucun membre ne correspond à votre recherche.";
+                emptyState.hidden = false;
+            }
+            return;
+        }
+
+        if (emptyState) emptyState.hidden = true;
+
+        // Génération propre en direct
+        list.innerHTML = visible.map((user) => {
+            const displayName = user.username || "Membre";
+            const initial = initials(displayName);
+            const userUrl = `message_prive.html?user_id=${user.id}&username=${encodeURIComponent(displayName)}`;
+
+            return `
+                <li class="contact-item" style="display: flex !important; visibility: visible !important; opacity: 1 !important;">
+                    <div class="contact-avatar" aria-hidden="true">${initial}</div>
+                    <div class="contact-info">
+                        <div class="contact-name">${displayName}</div>
+                        <div class="contact-username">Membre actif</div>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="${userUrl}" class="icon-btn" title="Envoyer un message privé" aria-label="Envoyer un message à ${displayName}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </li>
+            `;
+        }).join("");
     }
 
     searchInput?.addEventListener("input", () => render());
