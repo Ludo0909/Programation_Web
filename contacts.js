@@ -1,3 +1,4 @@
+
 (function () {
     "use strict";
 
@@ -30,11 +31,9 @@
         svg.setAttribute("stroke-linecap", "round");
         svg.setAttribute("stroke-linejoin", "round");
         svg.setAttribute("aria-hidden", "true");
-        paths.forEach((d) => {
-            const path = document.createElementNS(ns, "path");
-            path.setAttribute("d", d);
-            svg.appendChild(path);
-        });
+        const path = document.createElementNS(ns, "path");
+        path.setAttribute("d", d);
+        svg.appendChild(path);
         return svg;
     }
 
@@ -66,8 +65,11 @@
             subtitle.textContent = "Membre actif";
             info.append(name, subtitle);
 
-            const actions = document.createElement("div");
-            actions.className = "contact-actions";
+            const chatLink = document.createElement("a");
+            chatLink.className = "chat-btn";
+            chatLink.href = "message_prive.html?user=" + encodeURIComponent(member.id);
+            chatLink.setAttribute("aria-label", "Discuter avec " + displayName(member));
+            chatLink.append(svgIcon("M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"), "Discuter");
 
             const messageLink = document.createElement("a");
             messageLink.className = "icon-btn";
