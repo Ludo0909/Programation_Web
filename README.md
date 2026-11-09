@@ -116,10 +116,10 @@ Tables Supabase utilisées par le site :
 
 | Table | Colonnes principales | Rôle |
 | --- | --- | --- |
-| `channels` | id, name, created_by | Salons de discussion |
+| `channels` | id, name, created_by, created_at | Salons de discussion |
 | `messages` | id, channel_id, content, username, created_by, created_at | Messages des salons |
 | `direct_messages` | id, sender_id, receiver_id, sender_username, content, created_at | Messages privés |
-| `events` | id, channel_id, title, category (`projet` ou `occupe`), start_time, end_time, user_id, username | Calendrier des salons |
+| `events` | id, channel_id, title, category (`projet` ou `occupe`), start_time, end_time, user_id, username, created_at | Calendrier des salons |
 
 Les informations du profil (nom complet, nom d'utilisateur, date de naissance) sont enregistrées dans les métadonnées du compte Supabase (`user_metadata`).
 
