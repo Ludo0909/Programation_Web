@@ -1,6 +1,6 @@
 # WorkFlow
 
-Une plateforme d'échange pour faciliter le contact entre collègues et la planification de rencontres.
+Une plateforme d'échange pour faciliter le contact entre collègues/étudiants et la planification de rencontres.
 
 **Site en ligne :** [ludo0909.github.io/Programation_Web](https://ludo0909.github.io/Programation_Web/)
 
