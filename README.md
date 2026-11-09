@@ -11,11 +11,11 @@ Une plateforme d'échange pour faciliter le contact entre collègues et la plani
 
 ## Objectifs
 
-Ce projet, réalisé dans le cadre du cours de programmation Web, a pour but de mettre en pratique les bases de la conception d'un site Web : structure HTML, mise en page CSS, interactivité en JavaScript et communication avec un service en ligne (authentification et base de données).
+Ce projet, réalisé dans le cadre du cours de programmation Web, a pour but de mettre en pratique les bases de la conception d'un site : structure HTML, mise en page CSS, interactivité en JavaScript et communication avec un service en ligne (authentification et base de données).
 
 ### Notre fonctionnalité principale
 
-Un **calendrier intégré aux conversations** : dans chaque salon, les membres peuvent indiquer leurs disponibilités et leurs rencontres afin de trouver facilement des moments communs.
+Un **calendrier intégré aux conversations** : dans les salons, les membres peuvent indiquer leurs disponibilités et leurs rencontres afin de trouver facilement des moments communs.
 
 ## Fonctionnalités
 
@@ -72,10 +72,6 @@ Programation_Web/
     └── calendar.js         Calendrier mensuel (non utilisé pour l'instant)
 ```
 
-## Architecture
-
-
-
 ### Fichiers utilisés par chaque page
 
 | Page | CSS | JavaScript |
@@ -90,12 +86,6 @@ Programation_Web/
 | `profil.html` | style.css, profil.css | theme.js, supabase-service.js, script.js, profil.js |
 | `parametre.html` | style.css, style dans la page | theme.js, supabase-service.js, script dans la page |
 
-### Ordre de chargement des scripts
-
-La bibliothèque supabase-js doit être chargée avant `supabase-service.js`, qui doit l'être avant les scripts de page. Les scripts `defer` s'exécutent dans l'ordre où ils sont écrits, après la lecture du HTML.
-
-`theme.js` est chargé sans `defer` dans le `<head>` pour appliquer le thème avant le premier affichage. Sinon, le thème clair pourrait apparaître brièvement avant le thème sombre.
-
 ### Le thème
 
 - Le choix (`light` ou `dark`) est enregistré dans `localStorage` sous la clé `site-theme`, depuis la page Paramètres.
@@ -105,10 +95,6 @@ La bibliothèque supabase-js doit être chargée avant `supabase-service.js`, qu
 ### Affichage mobile
 
 Sous 768 px de largeur, le menu latéral est remplacé par un **menu flottant** (bouton `+` en bas à droite). Dans la messagerie, la liste des conversations et la conversation ouverte s'affichent une à la fois, avec un bouton « Retour ».
-
-### Gestion des sessions
-
-Chaque page protégée vérifie la session avec `AuthService.getUser()` et redirige vers `index.html` si personne n'est connecté. Elle écoute aussi `AuthService.onSessionChange()` pour rediriger dès que la session se termine.
 
 ## Base de données
 
@@ -125,8 +111,7 @@ Les informations du profil (nom complet, nom d'utilisateur, date de naissance) s
 
 ### Sécurité
 
-La clé « publishable » de `supabase-service.js` est visible par tout le monde, c'est normal. La protection des données repose sur la sécurité au niveau des lignes (RLS) de PostgreSQL, à configurer dans Supabase pour chaque table.
+La clé « publishable » de `supabase-service.js` est visible par tout le monde. La protection des données repose sur la sécurité au niveau des lignes (RLS) de PostgreSQL, à configurer dans Supabase pour chaque table.
 
-Ne jamais mettre la clé secrète (`service_role`) dans le code du navigateur.
 
 
