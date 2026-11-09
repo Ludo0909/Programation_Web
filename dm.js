@@ -247,5 +247,4 @@ async function init() {
     selectRecipient(cardElement, targetUser);
   }
 }
-
 init();
