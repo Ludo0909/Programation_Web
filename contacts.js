@@ -135,7 +135,7 @@
         render();
     }
 
-    // ---------- Démarrage ----------
+    // ---------- Démarrage --------
 
     function supabaseReady() {
         try {
